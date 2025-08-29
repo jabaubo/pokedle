@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardBackgroundColor="#FFB3E5FC"
+    app:cardCornerRadius="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvSpritePkmn"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_marginTop="2dp"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivSpritePkmn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="false"
+                android:padding="2dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/placeholder" />
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvNombrePokemon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="2dp"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cvSpritePkmn"
+            app:layout_constraintTop_toTopOf="@+id/cvSpritePkmn">
+
+            <TextView
+                android:id="@+id/tvNombrePkmn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTintMode="add"
+                android:padding="0.25dp"
+                android:text="TextView"
+                tools:layout_editor_absoluteX="104dp" />
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvTipo1"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintStart_toStartOf="@+id/cvNombrePokemon"
+            app:layout_constraintTop_toBottomOf="@+id/cvNombrePokemon">
+
+            <TextView
+                android:id="@+id/tvTipo1Pkmn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="0.25dp"
+                android:text="TextView"
+                tools:layout_editor_absoluteX="104dp"
+                tools:layout_editor_absoluteY="24dp" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvTipo2"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/cvTipo1"
+            app:layout_constraintEnd_toEndOf="@+id/cvNombrePokemon"
+            app:layout_constraintTop_toTopOf="@+id/cvTipo1">
+
+
+            <TextView
+                android:id="@+id/tvTipo2Pkmn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="0.25dp"
+                android:text="TextView" />
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvPesoPokemon"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/cvEtapaPokemon"
+            app:layout_constraintStart_toStartOf="@+id/cvTipo1"
+            app:layout_constraintTop_toBottomOf="@+id/cvTipo1">
+
+            <TextView
+                android:id="@+id/tvPesoPokemon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="0.25dp"
+                android:text="TextView"
+                tools:layout_editor_absoluteX="104dp"
+                tools:layout_editor_absoluteY="48dp" />
+
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvAlturaPokemon"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/cvPesoPokemon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/cvTipo2"
+            app:layout_constraintTop_toTopOf="@+id/cvPesoPokemon">
+
+            <TextView
+                android:id="@+id/tvAlturaPkmn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="0.25dp"
+                android:text="TextView"
+                tools:layout_editor_absoluteX="290dp"
+                tools:layout_editor_absoluteY="43dp" />
+
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvEtapaPokemon"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/cvPesoPokemon">
+
+            <TextView
+                android:id="@+id/tvEtapaPkmn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="0.25dp"
+                android:text="TextView"
+                tools:layout_editor_absoluteX="104dp"
+                tools:layout_editor_absoluteY="72dp" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvRegionPokemon"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/cvAlturaPokemon"
+            app:layout_constraintTop_toTopOf="@+id/cvEtapaPokemon">
+
+            <TextView
+                android:id="@+id/tvRegionPkmn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="0.25dp"
+                android:text="TextView"
+                tools:layout_editor_absoluteX="290dp"
+                tools:layout_editor_absoluteY="64dp" />
+
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

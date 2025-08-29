@@ -1,0 +1,1246 @@
+/*
+ * Autor : Javier Bautista Bonilla
+ *
+ * Clase : Controlador
+ *
+ * Funcionalidad : Funciones para la carga de los Objetos Pokemon , la comparación de ellos y la selección   */
+
+package com.jabaubo.pokedle;
+
+import android.content.Context;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
+public class Controlador {
+    private ArrayList<Pokemon> pokedex = new ArrayList<>();
+    private ArrayList<Pokemon> pokedexEnUso = new ArrayList<>();
+    private ArrayList<Integer> pokemonMencionados = new ArrayList<>();
+    private ArrayList<Pokemon> pokemonComparados = new ArrayList<>();
+    private int intento = 0;
+    private RecyclerView rv ;
+    private Context context;
+    private int region = 0;
+    private Pokemon pkmnElegido;
+
+    public Controlador(RecyclerView rv, Context context) {
+        this.rv = rv;
+        this.context = context;
+        pokedex.add(new Pokemon(1, "Bulbasaur", Pokemon.PLANTA, Pokemon.VENENO, 0.7, 6.9, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(2, "Ivysaur", Pokemon.PLANTA, Pokemon.VENENO, 1.0, 13.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(3, "Venusaur", Pokemon.PLANTA, Pokemon.VENENO, 2.0, 100.0, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(4, "Charmander", Pokemon.FUEGO, Pokemon.NINGUNO, 0.6, 8.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(5, "Charmeleon", Pokemon.FUEGO, Pokemon.NINGUNO, 1.1, 19.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(6, "Charizard", Pokemon.FUEGO, Pokemon.VOLADOR, 1.7, 90.5, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(7, "Squirtle", Pokemon.AGUA, Pokemon.NINGUNO, 0.5, 9.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(8, "Wartortle", Pokemon.AGUA, Pokemon.NINGUNO, 1.0, 22.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(9, "Blastoise", Pokemon.AGUA, Pokemon.NINGUNO, 1.6, 85.5, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(10, "Caterpie", Pokemon.BICHO, Pokemon.NINGUNO, 0.3, 2.9, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(11, "Metapod", Pokemon.BICHO, Pokemon.NINGUNO, 0.7, 9.9, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(12, "Butterfree", Pokemon.BICHO, Pokemon.VOLADOR, 1.1, 32.0, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(13, "Weedle", Pokemon.BICHO, Pokemon.VENENO, 0.3, 3.2, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(14, "Kakuna", Pokemon.BICHO, Pokemon.VENENO, 0.6, 10.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(15, "Beedrill", Pokemon.BICHO, Pokemon.VENENO, 1.0, 29.5, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(16, "Pidgey", Pokemon.NORMAL, Pokemon.VOLADOR, 0.3, 1.8, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(17, "Pidgeotto", Pokemon.NORMAL, Pokemon.VOLADOR, 1.1, 30.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(18, "Pidgeot", Pokemon.NORMAL, Pokemon.VOLADOR, 1.5, 39.5, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(19, "Rattata", Pokemon.NORMAL, Pokemon.NINGUNO, 0.3, 3.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(20, "Raticate", Pokemon.NORMAL, Pokemon.NINGUNO, 0.7, 18.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(21, "Spearow", Pokemon.NORMAL, Pokemon.VOLADOR, 0.3, 2.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(22, "Fearow", Pokemon.NORMAL, Pokemon.VOLADOR, 1.2, 38.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(23, "Ekans", Pokemon.VENENO, Pokemon.NINGUNO, 2.0, 6.9, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(24, "Arbok", Pokemon.VENENO, Pokemon.NINGUNO, 3.5, 65.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(25, "Pikachu", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.4, 6.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(26, "Raichu", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.8, 30.0, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(27, "Sandshrew", Pokemon.TIERRA, Pokemon.NINGUNO, 0.6, 12.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(28, "Sandslash", Pokemon.TIERRA, Pokemon.NINGUNO, 1.0, 29.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(29, "Nidoran-f", Pokemon.VENENO, Pokemon.NINGUNO, 0.4, 7.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(30, "Nidorina", Pokemon.VENENO, Pokemon.NINGUNO, 0.8, 20.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(31, "Nidoqueen", Pokemon.VENENO, Pokemon.TIERRA, 1.3, 60.0, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(32, "Nidoran-m", Pokemon.VENENO, Pokemon.NINGUNO, 0.5, 9.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(33, "Nidorino", Pokemon.VENENO, Pokemon.NINGUNO, 0.9, 19.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(34, "Nidoking", Pokemon.VENENO, Pokemon.TIERRA, 1.4, 62.0, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(35, "Clefairy", Pokemon.HADA, Pokemon.NINGUNO, 0.6, 7.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(36, "Clefable", Pokemon.HADA, Pokemon.NINGUNO, 1.3, 40.0, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(37, "Vulpix", Pokemon.FUEGO, Pokemon.NINGUNO, 0.6, 9.9, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(38, "Ninetales", Pokemon.FUEGO, Pokemon.NINGUNO, 1.1, 19.9, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(39, "Jigglypuff", Pokemon.NORMAL, Pokemon.HADA, 0.5, 5.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(40, "Wigglytuff", Pokemon.NORMAL, Pokemon.HADA, 1.0, 12.0, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(41, "Zubat", Pokemon.VENENO, Pokemon.VOLADOR, 0.8, 7.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(42, "Golbat", Pokemon.VENENO, Pokemon.VOLADOR, 1.6, 55.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(43, "Oddish", Pokemon.PLANTA, Pokemon.VENENO, 0.5, 5.4, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(44, "Gloom", Pokemon.PLANTA, Pokemon.VENENO, 0.8, 8.6, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(45, "Vileplume", Pokemon.PLANTA, Pokemon.VENENO, 1.2, 18.6, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(46, "Paras", Pokemon.BICHO, Pokemon.PLANTA, 0.3, 5.4, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(47, "Parasect", Pokemon.BICHO, Pokemon.PLANTA, 1.0, 29.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(48, "Venonat", Pokemon.BICHO, Pokemon.VENENO, 1.0, 30.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(49, "Venomoth", Pokemon.BICHO, Pokemon.VENENO, 1.5, 12.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(50, "Diglett", Pokemon.TIERRA, Pokemon.NINGUNO, 0.2, 0.8, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(51, "Dugtrio", Pokemon.TIERRA, Pokemon.NINGUNO, 0.7, 33.3, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(52, "Meowth", Pokemon.NORMAL, Pokemon.NINGUNO, 0.4, 4.2, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(53, "Persian", Pokemon.NORMAL, Pokemon.NINGUNO, 1.0, 32.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(54, "Psyduck", Pokemon.AGUA, Pokemon.NINGUNO, 0.8, 19.6, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(55, "Golduck", Pokemon.AGUA, Pokemon.NINGUNO, 1.7, 76.6, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(56, "Mankey", Pokemon.LUCHA, Pokemon.NINGUNO, 0.5, 28.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(57, "Primeape", Pokemon.LUCHA, Pokemon.NINGUNO, 1.0, 32.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(58, "Growlithe", Pokemon.FUEGO, Pokemon.NINGUNO, 0.7, 19.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(59, "Arcanine", Pokemon.FUEGO, Pokemon.NINGUNO, 1.9, 155.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(60, "Poliwag", Pokemon.AGUA, Pokemon.NINGUNO, 0.6, 12.4, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(61, "Poliwhirl", Pokemon.AGUA, Pokemon.NINGUNO, 1.0, 20.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(62, "Poliwrath", Pokemon.AGUA, Pokemon.LUCHA, 1.3, 54.0, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(63, "Abra", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.9, 19.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(64, "Kadabra", Pokemon.PSIQUICO, Pokemon.NINGUNO, 1.3, 56.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(65, "Alakazam", Pokemon.PSIQUICO, Pokemon.NINGUNO, 1.5, 48.0, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(66, "Machop", Pokemon.LUCHA, Pokemon.NINGUNO, 0.8, 19.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(67, "Machoke", Pokemon.LUCHA, Pokemon.NINGUNO, 1.5, 70.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(68, "Machamp", Pokemon.LUCHA, Pokemon.NINGUNO, 1.6, 130.0, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(69, "Bellsprout", Pokemon.PLANTA, Pokemon.VENENO, 0.7, 4.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(70, "Weepinbell", Pokemon.PLANTA, Pokemon.VENENO, 1.0, 6.4, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(71, "Victreebel", Pokemon.PLANTA, Pokemon.VENENO, 1.7, 15.5, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(72, "Tentacool", Pokemon.AGUA, Pokemon.VENENO, 0.9, 45.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(73, "Tentacruel", Pokemon.AGUA, Pokemon.VENENO, 1.6, 55.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(74, "Geodude", Pokemon.ROCA, Pokemon.TIERRA, 0.4, 20.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(75, "Graveler", Pokemon.ROCA, Pokemon.TIERRA, 1.0, 105.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(76, "Golem", Pokemon.ROCA, Pokemon.TIERRA, 1.4, 300.0, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(77, "Ponyta", Pokemon.FUEGO, Pokemon.NINGUNO, 1.0, 30.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(78, "Rapidash", Pokemon.FUEGO, Pokemon.NINGUNO, 1.7, 95.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(79, "Slowpoke", Pokemon.AGUA, Pokemon.PSIQUICO, 1.2, 36.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(80, "Slowbro", Pokemon.AGUA, Pokemon.PSIQUICO, 1.6, 78.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(81, "Magnemite", Pokemon.ELECTRICO, Pokemon.ACERO, 0.3, 6.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(82, "Magneton", Pokemon.ELECTRICO, Pokemon.ACERO, 1.0, 60.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(83, "Farfetchd", Pokemon.NORMAL, Pokemon.VOLADOR, 0.8, 15.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(84, "Doduo", Pokemon.NORMAL, Pokemon.VOLADOR, 1.4, 39.2, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(85, "Dodrio", Pokemon.NORMAL, Pokemon.VOLADOR, 1.8, 85.2, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(86, "Seel", Pokemon.AGUA, Pokemon.NINGUNO, 1.1, 90.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(87, "Dewgong", Pokemon.AGUA, Pokemon.HIELO, 1.7, 120.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(88, "Grimer", Pokemon.VENENO, Pokemon.NINGUNO, 0.9, 30.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(89, "Muk", Pokemon.VENENO, Pokemon.NINGUNO, 1.2, 30.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(90, "Shellder", Pokemon.AGUA, Pokemon.NINGUNO, 0.3, 4.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(91, "Cloyster", Pokemon.AGUA, Pokemon.HIELO, 1.5, 132.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(92, "Gastly", Pokemon.FANTASMA, Pokemon.VENENO, 1.3, 0.1, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(93, "Haunter", Pokemon.FANTASMA, Pokemon.VENENO, 1.6, 0.1, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(94, "Gengar", Pokemon.FANTASMA, Pokemon.VENENO, 1.5, 40.5, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(95, "Onix", Pokemon.ROCA, Pokemon.TIERRA, 8.8, 210.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(96, "Drowzee", Pokemon.PSIQUICO, Pokemon.NINGUNO, 1.0, 32.4, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(97, "Hypno", Pokemon.PSIQUICO, Pokemon.NINGUNO, 1.6, 75.6, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(98, "Krabby", Pokemon.AGUA, Pokemon.NINGUNO, 0.4, 6.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(99, "Kingler", Pokemon.AGUA, Pokemon.NINGUNO, 1.3, 60.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(100, "Voltorb", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.5, 10.4, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(101, "Electrode", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.2, 66.6, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(102, "Exeggcute", Pokemon.PLANTA, Pokemon.PSIQUICO, 0.4, 2.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(103, "Exeggutor", Pokemon.PLANTA, Pokemon.PSIQUICO, 2.0, 120.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(104, "Cubone", Pokemon.TIERRA, Pokemon.NINGUNO, 0.4, 6.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(105, "Marowak", Pokemon.TIERRA, Pokemon.NINGUNO, 1.0, 45.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(106, "Hitmonlee", Pokemon.LUCHA, Pokemon.NINGUNO, 1.5, 49.8, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(107, "Hitmonchan", Pokemon.LUCHA, Pokemon.NINGUNO, 1.4, 50.2, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(108, "Lickitung", Pokemon.NORMAL, Pokemon.NINGUNO, 1.2, 65.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(109, "Koffing", Pokemon.VENENO, Pokemon.NINGUNO, 0.6, 1.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(110, "Weezing", Pokemon.VENENO, Pokemon.NINGUNO, 1.2, 9.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(111, "Rhyhorn", Pokemon.TIERRA, Pokemon.ROCA, 1.0, 115.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(112, "Rhydon", Pokemon.TIERRA, Pokemon.ROCA, 1.9, 120.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(113, "Chansey", Pokemon.NORMAL, Pokemon.NINGUNO, 1.1, 34.6, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(114, "Tangela", Pokemon.PLANTA, Pokemon.NINGUNO, 1.0, 35.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(115, "Kangaskhan", Pokemon.NORMAL, Pokemon.NINGUNO, 2.2, 80.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(116, "Horsea", Pokemon.AGUA, Pokemon.NINGUNO, 0.4, 8.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(117, "Seadra", Pokemon.AGUA, Pokemon.NINGUNO, 1.2, 25.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(118, "Goldeen", Pokemon.AGUA, Pokemon.NINGUNO, 0.6, 15.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(119, "Seaking", Pokemon.AGUA, Pokemon.NINGUNO, 1.3, 39.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(120, "Staryu", Pokemon.AGUA, Pokemon.NINGUNO, 0.8, 34.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(121, "Starmie", Pokemon.AGUA, Pokemon.PSIQUICO, 1.1, 80.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(122, "Mr-mime", Pokemon.PSIQUICO, Pokemon.HADA, 1.3, 54.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(123, "Scyther", Pokemon.BICHO, Pokemon.VOLADOR, 1.5, 56.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(124, "Jynx", Pokemon.HIELO, Pokemon.PSIQUICO, 1.4, 40.6, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(125, "Electabuzz", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.1, 30.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(126, "Magmar", Pokemon.FUEGO, Pokemon.NINGUNO, 1.3, 44.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(127, "Pinsir", Pokemon.BICHO, Pokemon.NINGUNO, 1.5, 55.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(128, "Tauros", Pokemon.NORMAL, Pokemon.NINGUNO, 1.4, 88.4, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(129, "Magikarp", Pokemon.AGUA, Pokemon.NINGUNO, 0.9, 10.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(130, "Gyarados", Pokemon.AGUA, Pokemon.VOLADOR, 6.5, 235.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(131, "Lapras", Pokemon.AGUA, Pokemon.HIELO, 2.5, 220.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(132, "Ditto", Pokemon.NORMAL, Pokemon.NINGUNO, 0.3, 4.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(133, "Eevee", Pokemon.NORMAL, Pokemon.NINGUNO, 0.3, 6.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(134, "Vaporeon", Pokemon.AGUA, Pokemon.NINGUNO, 1.0, 29.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(135, "Jolteon", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.8, 24.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(136, "Flareon", Pokemon.FUEGO, Pokemon.NINGUNO, 0.9, 25.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(137, "Porygon", Pokemon.NORMAL, Pokemon.NINGUNO, 0.8, 36.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(138, "Omanyte", Pokemon.ROCA, Pokemon.AGUA, 0.4, 7.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(139, "Omastar", Pokemon.ROCA, Pokemon.AGUA, 1.0, 35.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(140, "Kabuto", Pokemon.ROCA, Pokemon.AGUA, 0.5, 11.5, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(141, "Kabutops", Pokemon.ROCA, Pokemon.AGUA, 1.3, 40.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(142, "Aerodactyl", Pokemon.ROCA, Pokemon.VOLADOR, 1.8, 59.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(143, "Snorlax", Pokemon.NORMAL, Pokemon.NINGUNO, 2.1, 460.0, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(144, "Articuno", Pokemon.HIELO, Pokemon.VOLADOR, 1.7, 55.4, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(145, "Zapdos", Pokemon.ELECTRICO, Pokemon.VOLADOR, 1.6, 52.6, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(146, "Moltres", Pokemon.FUEGO, Pokemon.VOLADOR, 2.0, 60.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(147, "Dratini", Pokemon.DRAGON, Pokemon.NINGUNO, 1.8, 3.3, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(148, "Dragonair", Pokemon.DRAGON, Pokemon.NINGUNO, 4.0, 16.5, 2, Pokemon.KANTO));
+        pokedex.add(new Pokemon(149, "Dragonite", Pokemon.DRAGON, Pokemon.VOLADOR, 2.2, 210.0, 3, Pokemon.KANTO));
+        pokedex.add(new Pokemon(150, "Mewtwo", Pokemon.PSIQUICO, Pokemon.NINGUNO, 2.0, 122.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(151, "Mew", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.4, 4.0, 1, Pokemon.KANTO));
+        pokedex.add(new Pokemon(152, "Chikorita", Pokemon.PLANTA, Pokemon.NINGUNO, 0.9, 6.4, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(153, "Bayleef", Pokemon.PLANTA, Pokemon.NINGUNO, 1.2, 15.8, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(154, "Meganium", Pokemon.PLANTA, Pokemon.NINGUNO, 1.8, 100.5, 3, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(155, "Cyndaquil", Pokemon.FUEGO, Pokemon.NINGUNO, 0.5, 7.9, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(156, "Quilava", Pokemon.FUEGO, Pokemon.NINGUNO, 0.9, 19.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(157, "Typhlosion", Pokemon.FUEGO, Pokemon.NINGUNO, 1.7, 79.5, 3, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(158, "Totodile", Pokemon.AGUA, Pokemon.NINGUNO, 0.6, 9.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(159, "Croconaw", Pokemon.AGUA, Pokemon.NINGUNO, 1.1, 25.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(160, "Feraligatr", Pokemon.AGUA, Pokemon.NINGUNO, 2.3, 88.8, 3, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(161, "Sentret", Pokemon.NORMAL, Pokemon.NINGUNO, 0.8, 6.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(162, "Furret", Pokemon.NORMAL, Pokemon.NINGUNO, 1.8, 32.5, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(163, "Hoothoot", Pokemon.NORMAL, Pokemon.VOLADOR, 0.7, 21.2, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(164, "Noctowl", Pokemon.NORMAL, Pokemon.VOLADOR, 1.6, 40.8, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(165, "Ledyba", Pokemon.BICHO, Pokemon.VOLADOR, 1.0, 10.8, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(166, "Ledian", Pokemon.BICHO, Pokemon.VOLADOR, 1.4, 35.6, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(167, "Spinarak", Pokemon.BICHO, Pokemon.VENENO, 0.5, 8.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(168, "Ariados", Pokemon.BICHO, Pokemon.VENENO, 1.1, 33.5, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(169, "Crobat", Pokemon.VENENO, Pokemon.VOLADOR, 1.8, 75.0, 3, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(170, "Chinchou", Pokemon.AGUA, Pokemon.ELECTRICO, 0.5, 12.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(171, "Lanturn", Pokemon.AGUA, Pokemon.ELECTRICO, 1.2, 22.5, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(172, "Pichu", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.3, 2.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(173, "Cleffa", Pokemon.HADA, Pokemon.NINGUNO, 0.3, 3.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(174, "Igglybuff", Pokemon.NORMAL, Pokemon.HADA, 0.3, 1.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(175, "Togepi", Pokemon.HADA, Pokemon.NINGUNO, 0.3, 1.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(176, "Togetic", Pokemon.HADA, Pokemon.VOLADOR, 0.6, 3.2, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(177, "Natu", Pokemon.PSIQUICO, Pokemon.VOLADOR, 0.2, 2.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(178, "Xatu", Pokemon.PSIQUICO, Pokemon.VOLADOR, 1.5, 15.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(179, "Mareep", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.6, 7.8, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(180, "Flaaffy", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.8, 13.3, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(181, "Ampharos", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.4, 61.5, 3, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(182, "Bellossom", Pokemon.PLANTA, Pokemon.NINGUNO, 0.4, 5.8, 3, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(183, "Marill", Pokemon.AGUA, Pokemon.HADA, 0.4, 8.5, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(184, "Azumarill", Pokemon.AGUA, Pokemon.HADA, 0.8, 28.5, 3, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(185, "Sudowoodo", Pokemon.ROCA, Pokemon.NINGUNO, 1.2, 38.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(186, "Politoed", Pokemon.AGUA, Pokemon.NINGUNO, 1.1, 33.9, 3, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(187, "Hoppip", Pokemon.PLANTA, Pokemon.VOLADOR, 0.4, 0.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(188, "Skiploom", Pokemon.PLANTA, Pokemon.VOLADOR, 0.6, 1.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(189, "Jumpluff", Pokemon.PLANTA, Pokemon.VOLADOR, 0.8, 3.0, 3, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(190, "Aipom", Pokemon.NORMAL, Pokemon.NINGUNO, 0.8, 11.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(191, "Sunkern", Pokemon.PLANTA, Pokemon.NINGUNO, 0.3, 1.8, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(192, "Sunflora", Pokemon.PLANTA, Pokemon.NINGUNO, 0.8, 8.5, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(193, "Yanma", Pokemon.BICHO, Pokemon.VOLADOR, 1.2, 38.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(194, "Wooper", Pokemon.AGUA, Pokemon.TIERRA, 0.4, 8.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(195, "Quagsire", Pokemon.AGUA, Pokemon.TIERRA, 1.4, 75.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(196, "Espeon", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.9, 26.5, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(197, "Umbreon", Pokemon.SINIESTRO, Pokemon.NINGUNO, 1.0, 27.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(198, "Murkrow", Pokemon.SINIESTRO, Pokemon.VOLADOR, 0.5, 2.1, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(199, "Slowking", Pokemon.AGUA, Pokemon.PSIQUICO, 2.0, 79.5, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(200, "Misdreavus", Pokemon.FANTASMA, Pokemon.NINGUNO, 0.7, 1.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(201, "Unown", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.5, 5.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(202, "Wobbuffet", Pokemon.PSIQUICO, Pokemon.NINGUNO, 1.3, 28.5, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(203, "Girafarig", Pokemon.NORMAL, Pokemon.PSIQUICO, 1.5, 41.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(204, "Pineco", Pokemon.BICHO, Pokemon.NINGUNO, 0.6, 7.2, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(205, "Forretress", Pokemon.BICHO, Pokemon.ACERO, 1.2, 125.8, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(206, "Dunsparce", Pokemon.NORMAL, Pokemon.NINGUNO, 1.5, 14.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(207, "Gligar", Pokemon.TIERRA, Pokemon.VOLADOR, 1.1, 64.8, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(208, "Steelix", Pokemon.ACERO, Pokemon.TIERRA, 9.2, 400.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(209, "Snubbull", Pokemon.HADA, Pokemon.NINGUNO, 0.6, 7.8, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(210, "Granbull", Pokemon.HADA, Pokemon.NINGUNO, 1.4, 48.7, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(211, "Qwilfish", Pokemon.AGUA, Pokemon.VENENO, 0.5, 3.9, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(212, "Scizor", Pokemon.BICHO, Pokemon.ACERO, 1.8, 118.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(213, "Shuckle", Pokemon.BICHO, Pokemon.ROCA, 0.6, 20.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(214, "Heracross", Pokemon.BICHO, Pokemon.LUCHA, 1.5, 54.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(215, "Sneasel", Pokemon.SINIESTRO, Pokemon.HIELO, 0.9, 28.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(216, "Teddiursa", Pokemon.NORMAL, Pokemon.NINGUNO, 0.6, 8.8, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(217, "Ursaring", Pokemon.NORMAL, Pokemon.NINGUNO, 1.8, 125.8, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(218, "Slugma", Pokemon.FUEGO, Pokemon.NINGUNO, 0.7, 35.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(219, "Magcargo", Pokemon.FUEGO, Pokemon.ROCA, 0.8, 55.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(220, "Swinub", Pokemon.HIELO, Pokemon.TIERRA, 0.4, 6.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(221, "Piloswine", Pokemon.HIELO, Pokemon.TIERRA, 1.1, 55.8, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(222, "Corsola", Pokemon.AGUA, Pokemon.ROCA, 0.6, 5.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(223, "Remoraid", Pokemon.AGUA, Pokemon.NINGUNO, 0.6, 12.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(224, "Octillery", Pokemon.AGUA, Pokemon.NINGUNO, 0.9, 28.5, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(225, "Delibird", Pokemon.HIELO, Pokemon.VOLADOR, 0.9, 16.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(226, "Mantine", Pokemon.AGUA, Pokemon.VOLADOR, 2.1, 220.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(227, "Skarmory", Pokemon.ACERO, Pokemon.VOLADOR, 1.7, 50.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(228, "Houndour", Pokemon.SINIESTRO, Pokemon.FUEGO, 0.6, 10.8, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(229, "Houndoom", Pokemon.SINIESTRO, Pokemon.FUEGO, 1.4, 35.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(230, "Kingdra", Pokemon.AGUA, Pokemon.DRAGON, 1.8, 152.0, 3, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(231, "Phanpy", Pokemon.TIERRA, Pokemon.NINGUNO, 0.5, 33.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(232, "Donphan", Pokemon.TIERRA, Pokemon.NINGUNO, 1.1, 120.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(233, "Porygon2", Pokemon.NORMAL, Pokemon.NINGUNO, 0.6, 32.5, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(234, "Stantler", Pokemon.NORMAL, Pokemon.NINGUNO, 1.4, 71.2, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(235, "Smeargle", Pokemon.NORMAL, Pokemon.NINGUNO, 1.2, 58.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(236, "Tyrogue", Pokemon.LUCHA, Pokemon.NINGUNO, 0.7, 21.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(237, "Hitmontop", Pokemon.LUCHA, Pokemon.NINGUNO, 1.4, 48.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(238, "Smoochum", Pokemon.HIELO, Pokemon.PSIQUICO, 0.4, 6.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(239, "Elekid", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.6, 23.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(240, "Magby", Pokemon.FUEGO, Pokemon.NINGUNO, 0.7, 21.4, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(241, "Miltank", Pokemon.NORMAL, Pokemon.NINGUNO, 1.2, 75.5, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(242, "Blissey", Pokemon.NORMAL, Pokemon.NINGUNO, 1.5, 46.8, 3, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(243, "Raikou", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.9, 178.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(244, "Entei", Pokemon.FUEGO, Pokemon.NINGUNO, 2.1, 198.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(245, "Suicune", Pokemon.AGUA, Pokemon.NINGUNO, 2.0, 187.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(246, "Larvitar", Pokemon.ROCA, Pokemon.TIERRA, 0.6, 72.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(247, "Pupitar", Pokemon.ROCA, Pokemon.TIERRA, 1.2, 152.0, 2, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(248, "Tyranitar", Pokemon.ROCA, Pokemon.SINIESTRO, 2.0, 202.0, 3, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(249, "Lugia", Pokemon.PSIQUICO, Pokemon.VOLADOR, 5.2, 216.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(250, "Ho-oh", Pokemon.FUEGO, Pokemon.VOLADOR, 3.8, 199.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(251, "Celebi", Pokemon.PSIQUICO, Pokemon.PLANTA, 0.6, 5.0, 1, Pokemon.JOHTO));
+        pokedex.add(new Pokemon(252, "Treecko", Pokemon.PLANTA, Pokemon.NINGUNO, 0.5, 5.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(253, "Grovyle", Pokemon.PLANTA, Pokemon.NINGUNO, 0.9, 21.6, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(254, "Sceptile", Pokemon.PLANTA, Pokemon.NINGUNO, 1.7, 52.2, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(255, "Torchic", Pokemon.FUEGO, Pokemon.NINGUNO, 0.4, 2.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(256, "Combusken", Pokemon.FUEGO, Pokemon.LUCHA, 0.9, 19.5, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(257, "Blaziken", Pokemon.FUEGO, Pokemon.LUCHA, 1.9, 52.0, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(258, "Mudkip", Pokemon.AGUA, Pokemon.NINGUNO, 0.4, 7.6, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(259, "Marshtomp", Pokemon.AGUA, Pokemon.TIERRA, 0.7, 28.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(260, "Swampert", Pokemon.AGUA, Pokemon.TIERRA, 1.5, 81.9, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(261, "Poochyena", Pokemon.SINIESTRO, Pokemon.NINGUNO, 0.5, 13.6, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(262, "Mightyena", Pokemon.SINIESTRO, Pokemon.NINGUNO, 1.0, 37.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(263, "Zigzagoon", Pokemon.NORMAL, Pokemon.NINGUNO, 0.4, 17.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(264, "Linoone", Pokemon.NORMAL, Pokemon.NINGUNO, 0.5, 32.5, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(265, "Wurmple", Pokemon.BICHO, Pokemon.NINGUNO, 0.3, 3.6, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(266, "Silcoon", Pokemon.BICHO, Pokemon.NINGUNO, 0.6, 10.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(267, "Beautifly", Pokemon.BICHO, Pokemon.VOLADOR, 1.0, 28.4, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(268, "Cascoon", Pokemon.BICHO, Pokemon.NINGUNO, 0.7, 11.5, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(269, "Dustox", Pokemon.BICHO, Pokemon.VENENO, 1.2, 31.6, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(270, "Lotad", Pokemon.AGUA, Pokemon.PLANTA, 0.5, 2.6, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(271, "Lombre", Pokemon.AGUA, Pokemon.PLANTA, 1.2, 32.5, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(272, "Ludicolo", Pokemon.AGUA, Pokemon.PLANTA, 1.5, 55.0, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(273, "Seedot", Pokemon.PLANTA, Pokemon.NINGUNO, 0.5, 4.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(274, "Nuzleaf", Pokemon.PLANTA, Pokemon.SINIESTRO, 1.0, 28.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(275, "Shiftry", Pokemon.PLANTA, Pokemon.SINIESTRO, 1.3, 59.6, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(276, "Taillow", Pokemon.NORMAL, Pokemon.VOLADOR, 0.3, 2.3, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(277, "Swellow", Pokemon.NORMAL, Pokemon.VOLADOR, 0.7, 19.8, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(278, "Wingull", Pokemon.AGUA, Pokemon.VOLADOR, 0.6, 9.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(279, "Pelipper", Pokemon.AGUA, Pokemon.VOLADOR, 1.2, 28.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(280, "Ralts", Pokemon.PSIQUICO, Pokemon.HADA, 0.4, 6.6, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(281, "Kirlia", Pokemon.PSIQUICO, Pokemon.HADA, 0.8, 20.2, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(282, "Gardevoir", Pokemon.PSIQUICO, Pokemon.HADA, 1.6, 48.4, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(283, "Surskit", Pokemon.BICHO, Pokemon.AGUA, 0.5, 1.7, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(284, "Masquerain", Pokemon.BICHO, Pokemon.VOLADOR, 0.8, 3.6, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(285, "Shroomish", Pokemon.PLANTA, Pokemon.NINGUNO, 0.4, 4.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(286, "Breloom", Pokemon.PLANTA, Pokemon.LUCHA, 1.2, 39.2, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(287, "Slakoth", Pokemon.NORMAL, Pokemon.NINGUNO, 0.8, 24.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(288, "Vigoroth", Pokemon.NORMAL, Pokemon.NINGUNO, 1.4, 46.5, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(289, "Slaking", Pokemon.NORMAL, Pokemon.NINGUNO, 2.0, 130.5, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(290, "Nincada", Pokemon.BICHO, Pokemon.TIERRA, 0.5, 5.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(291, "Ninjask", Pokemon.BICHO, Pokemon.VOLADOR, 0.8, 12.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(292, "Shedinja", Pokemon.BICHO, Pokemon.FANTASMA, 0.8, 1.2, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(293, "Whismur", Pokemon.NORMAL, Pokemon.NINGUNO, 0.6, 16.3, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(294, "Loudred", Pokemon.NORMAL, Pokemon.NINGUNO, 1.0, 40.5, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(295, "Exploud", Pokemon.NORMAL, Pokemon.NINGUNO, 1.5, 84.0, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(296, "Makuhita", Pokemon.LUCHA, Pokemon.NINGUNO, 1.0, 86.4, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(297, "Hariyama", Pokemon.LUCHA, Pokemon.NINGUNO, 2.3, 253.8, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(298, "Azurill", Pokemon.NORMAL, Pokemon.HADA, 0.2, 2.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(299, "Nosepass", Pokemon.ROCA, Pokemon.NINGUNO, 1.0, 97.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(300, "Skitty", Pokemon.NORMAL, Pokemon.NINGUNO, 0.6, 11.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(301, "Delcatty", Pokemon.NORMAL, Pokemon.NINGUNO, 1.1, 32.6, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(302, "Sableye", Pokemon.SINIESTRO, Pokemon.FANTASMA, 0.5, 11.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(303, "Mawile", Pokemon.ACERO, Pokemon.HADA, 0.6, 11.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(304, "Aron", Pokemon.ACERO, Pokemon.ROCA, 0.4, 60.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(305, "Lairon", Pokemon.ACERO, Pokemon.ROCA, 0.9, 120.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(306, "Aggron", Pokemon.ACERO, Pokemon.ROCA, 2.1, 360.0, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(307, "Meditite", Pokemon.LUCHA, Pokemon.PSIQUICO, 0.6, 11.2, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(308, "Medicham", Pokemon.LUCHA, Pokemon.PSIQUICO, 1.3, 31.5, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(309, "Electrike", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.6, 15.2, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(310, "Manectric", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.5, 40.2, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(311, "Plusle", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.4, 4.2, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(312, "Minun", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.4, 4.2, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(313, "Volbeat", Pokemon.BICHO, Pokemon.NINGUNO, 0.7, 17.7, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(314, "Illumise", Pokemon.BICHO, Pokemon.NINGUNO, 0.6, 17.7, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(315, "Roselia", Pokemon.PLANTA, Pokemon.VENENO, 0.3, 2.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(316, "Gulpin", Pokemon.VENENO, Pokemon.NINGUNO, 0.4, 10.3, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(317, "Swalot", Pokemon.VENENO, Pokemon.NINGUNO, 1.7, 80.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(318, "Carvanha", Pokemon.AGUA, Pokemon.SINIESTRO, 0.8, 20.8, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(319, "Sharpedo", Pokemon.AGUA, Pokemon.SINIESTRO, 1.8, 88.8, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(320, "Wailmer", Pokemon.AGUA, Pokemon.NINGUNO, 2.0, 130.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(321, "Wailord", Pokemon.AGUA, Pokemon.NINGUNO, 14.5, 398.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(322, "Numel", Pokemon.FUEGO, Pokemon.TIERRA, 0.7, 24.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(323, "Camerupt", Pokemon.FUEGO, Pokemon.TIERRA, 1.9, 220.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(324, "Torkoal", Pokemon.FUEGO, Pokemon.NINGUNO, 0.5, 80.4, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(325, "Spoink", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.7, 30.6, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(326, "Grumpig", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.9, 71.5, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(327, "Spinda", Pokemon.NORMAL, Pokemon.NINGUNO, 1.1, 5.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(328, "Trapinch", Pokemon.TIERRA, Pokemon.NINGUNO, 0.7, 15.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(329, "Vibrava", Pokemon.TIERRA, Pokemon.DRAGON, 1.1, 15.3, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(330, "Flygon", Pokemon.TIERRA, Pokemon.DRAGON, 2.0, 82.0, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(331, "Cacnea", Pokemon.PLANTA, Pokemon.NINGUNO, 0.4, 51.3, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(332, "Cacturne", Pokemon.PLANTA, Pokemon.SINIESTRO, 1.3, 77.4, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(333, "Swablu", Pokemon.NORMAL, Pokemon.VOLADOR, 0.4, 1.2, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(334, "Altaria", Pokemon.DRAGON, Pokemon.VOLADOR, 1.1, 20.6, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(335, "Zangoose", Pokemon.NORMAL, Pokemon.NINGUNO, 1.3, 40.3, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(336, "Seviper", Pokemon.VENENO, Pokemon.NINGUNO, 2.7, 52.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(337, "Lunatone", Pokemon.ROCA, Pokemon.PSIQUICO, 1.0, 168.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(338, "Solrock", Pokemon.ROCA, Pokemon.PSIQUICO, 1.2, 154.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(339, "Barboach", Pokemon.AGUA, Pokemon.TIERRA, 0.4, 1.9, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(340, "Whiscash", Pokemon.AGUA, Pokemon.TIERRA, 0.9, 23.6, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(341, "Corphish", Pokemon.AGUA, Pokemon.NINGUNO, 0.6, 11.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(342, "Crawdaunt", Pokemon.AGUA, Pokemon.SINIESTRO, 1.1, 32.8, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(343, "Baltoy", Pokemon.TIERRA, Pokemon.PSIQUICO, 0.5, 21.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(344, "Claydol", Pokemon.TIERRA, Pokemon.PSIQUICO, 1.5, 108.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(345, "Lileep", Pokemon.ROCA, Pokemon.PLANTA, 1.0, 23.8, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(346, "Cradily", Pokemon.ROCA, Pokemon.PLANTA, 1.5, 60.4, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(347, "Anorith", Pokemon.ROCA, Pokemon.BICHO, 0.7, 12.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(348, "Armaldo", Pokemon.ROCA, Pokemon.BICHO, 1.5, 68.2, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(349, "Feebas", Pokemon.AGUA, Pokemon.NINGUNO, 0.6, 7.4, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(350, "Milotic", Pokemon.AGUA, Pokemon.NINGUNO, 6.2, 162.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(351, "Castform", Pokemon.NORMAL, Pokemon.NINGUNO, 0.3, 0.8, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(352, "Kecleon", Pokemon.NORMAL, Pokemon.NINGUNO, 1.0, 22.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(353, "Shuppet", Pokemon.FANTASMA, Pokemon.NINGUNO, 0.6, 2.3, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(354, "Banette", Pokemon.FANTASMA, Pokemon.NINGUNO, 1.1, 12.5, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(355, "Duskull", Pokemon.FANTASMA, Pokemon.NINGUNO, 0.8, 15.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(356, "Dusclops", Pokemon.FANTASMA, Pokemon.NINGUNO, 1.6, 30.6, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(357, "Tropius", Pokemon.PLANTA, Pokemon.VOLADOR, 2.0, 100.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(358, "Chimecho", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.6, 1.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(359, "Absol", Pokemon.SINIESTRO, Pokemon.NINGUNO, 1.2, 47.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(360, "Wynaut", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.6, 14.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(361, "Snorunt", Pokemon.HIELO, Pokemon.NINGUNO, 0.7, 16.8, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(362, "Glalie", Pokemon.HIELO, Pokemon.NINGUNO, 1.5, 256.5, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(363, "Spheal", Pokemon.HIELO, Pokemon.AGUA, 0.8, 39.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(364, "Sealeo", Pokemon.HIELO, Pokemon.AGUA, 1.1, 87.6, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(365, "Walrein", Pokemon.HIELO, Pokemon.AGUA, 1.4, 150.6, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(366, "Clamperl", Pokemon.AGUA, Pokemon.NINGUNO, 0.4, 52.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(367, "Huntail", Pokemon.AGUA, Pokemon.NINGUNO, 1.7, 27.0, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(368, "Gorebyss", Pokemon.AGUA, Pokemon.NINGUNO, 1.8, 22.6, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(369, "Relicanth", Pokemon.AGUA, Pokemon.ROCA, 1.0, 23.4, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(370, "Luvdisc", Pokemon.AGUA, Pokemon.NINGUNO, 0.6, 8.7, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(371, "Bagon", Pokemon.DRAGON, Pokemon.NINGUNO, 0.6, 42.1, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(372, "Shelgon", Pokemon.DRAGON, Pokemon.NINGUNO, 1.1, 110.5, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(373, "Salamence", Pokemon.DRAGON, Pokemon.VOLADOR, 1.5, 102.6, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(374, "Beldum", Pokemon.ACERO, Pokemon.PSIQUICO, 0.6, 95.2, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(375, "Metang", Pokemon.ACERO, Pokemon.PSIQUICO, 1.2, 202.5, 2, Pokemon.HOENN));
+        pokedex.add(new Pokemon(376, "Metagross", Pokemon.ACERO, Pokemon.PSIQUICO, 1.6, 550.0, 3, Pokemon.HOENN));
+        pokedex.add(new Pokemon(377, "Regirock", Pokemon.ROCA, Pokemon.NINGUNO, 1.7, 230.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(378, "Regice", Pokemon.HIELO, Pokemon.NINGUNO, 1.8, 175.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(379, "Registeel", Pokemon.ACERO, Pokemon.NINGUNO, 1.9, 205.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(380, "Latias", Pokemon.DRAGON, Pokemon.PSIQUICO, 1.4, 40.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(381, "Latios", Pokemon.DRAGON, Pokemon.PSIQUICO, 2.0, 60.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(382, "Kyogre", Pokemon.AGUA, Pokemon.NINGUNO, 4.5, 352.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(383, "Groudon", Pokemon.TIERRA, Pokemon.NINGUNO, 3.5, 950.0, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(384, "Rayquaza", Pokemon.DRAGON, Pokemon.VOLADOR, 7.0, 206.5, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(385, "Jirachi", Pokemon.ACERO, Pokemon.PSIQUICO, 0.3, 1.1, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(386, "Deoxys-normal", Pokemon.PSIQUICO, Pokemon.NINGUNO, 1.7, 60.8, 1, Pokemon.HOENN));
+        pokedex.add(new Pokemon(387, "Turtwig", Pokemon.PLANTA, Pokemon.NINGUNO, 0.4, 10.2, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(388, "Grotle", Pokemon.PLANTA, Pokemon.NINGUNO, 1.1, 97.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(389, "Torterra", Pokemon.PLANTA, Pokemon.TIERRA, 2.2, 310.0, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(390, "Chimchar", Pokemon.FUEGO, Pokemon.NINGUNO, 0.5, 6.2, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(391, "Monferno", Pokemon.FUEGO, Pokemon.LUCHA, 0.9, 22.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(392, "Infernape", Pokemon.FUEGO, Pokemon.LUCHA, 1.2, 55.0, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(393, "Piplup", Pokemon.AGUA, Pokemon.NINGUNO, 0.4, 5.2, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(394, "Prinplup", Pokemon.AGUA, Pokemon.NINGUNO, 0.8, 23.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(395, "Empoleon", Pokemon.AGUA, Pokemon.ACERO, 1.7, 84.5, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(396, "Starly", Pokemon.NORMAL, Pokemon.VOLADOR, 0.3, 2.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(397, "Staravia", Pokemon.NORMAL, Pokemon.VOLADOR, 0.6, 15.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(398, "Staraptor", Pokemon.NORMAL, Pokemon.VOLADOR, 1.2, 24.9, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(399, "Bidoof", Pokemon.NORMAL, Pokemon.NINGUNO, 0.5, 20.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(400, "Bibarel", Pokemon.NORMAL, Pokemon.AGUA, 1.0, 31.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(401, "Kricketot", Pokemon.BICHO, Pokemon.NINGUNO, 0.3, 2.2, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(402, "Kricketune", Pokemon.BICHO, Pokemon.NINGUNO, 1.0, 25.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(403, "Shinx", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.5, 9.5, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(404, "Luxio", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.9, 30.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(405, "Luxray", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.4, 42.0, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(406, "Budew", Pokemon.PLANTA, Pokemon.VENENO, 0.2, 1.2, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(407, "Roserade", Pokemon.PLANTA, Pokemon.VENENO, 0.9, 14.5, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(408, "Cranidos", Pokemon.ROCA, Pokemon.NINGUNO, 0.9, 31.5, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(409, "Rampardos", Pokemon.ROCA, Pokemon.NINGUNO, 1.6, 102.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(410, "Shieldon", Pokemon.ROCA, Pokemon.ACERO, 0.5, 57.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(411, "Bastiodon", Pokemon.ROCA, Pokemon.ACERO, 1.3, 149.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(412, "Burmy", Pokemon.BICHO, Pokemon.NINGUNO, 0.2, 3.4, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(413, "Wormadam-plant", Pokemon.BICHO, Pokemon.PLANTA, 0.5, 6.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(414, "Mothim", Pokemon.BICHO, Pokemon.VOLADOR, 0.9, 23.3, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(415, "Combee", Pokemon.BICHO, Pokemon.VOLADOR, 0.3, 5.5, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(416, "Vespiquen", Pokemon.BICHO, Pokemon.VOLADOR, 1.2, 38.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(417, "Pachirisu", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.4, 3.9, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(418, "Buizel", Pokemon.AGUA, Pokemon.NINGUNO, 0.7, 29.5, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(419, "Floatzel", Pokemon.AGUA, Pokemon.NINGUNO, 1.1, 33.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(420, "Cherubi", Pokemon.PLANTA, Pokemon.NINGUNO, 0.4, 3.3, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(421, "Cherrim", Pokemon.PLANTA, Pokemon.NINGUNO, 0.5, 9.3, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(422, "Shellos", Pokemon.AGUA, Pokemon.NINGUNO, 0.3, 6.3, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(423, "Gastrodon", Pokemon.AGUA, Pokemon.TIERRA, 0.9, 29.9, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(424, "Ambipom", Pokemon.NORMAL, Pokemon.NINGUNO, 1.2, 20.3, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(425, "Drifloon", Pokemon.FANTASMA, Pokemon.VOLADOR, 0.4, 1.2, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(426, "Drifblim", Pokemon.FANTASMA, Pokemon.VOLADOR, 1.2, 15.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(427, "Buneary", Pokemon.NORMAL, Pokemon.NINGUNO, 0.4, 5.5, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(428, "Lopunny", Pokemon.NORMAL, Pokemon.NINGUNO, 1.2, 33.3, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(429, "Mismagius", Pokemon.FANTASMA, Pokemon.NINGUNO, 0.9, 4.4, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(430, "Honchkrow", Pokemon.SINIESTRO, Pokemon.VOLADOR, 0.9, 27.3, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(431, "Glameow", Pokemon.NORMAL, Pokemon.NINGUNO, 0.5, 3.9, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(432, "Purugly", Pokemon.NORMAL, Pokemon.NINGUNO, 1.0, 43.8, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(433, "Chingling", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.2, 0.6, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(434, "Stunky", Pokemon.VENENO, Pokemon.SINIESTRO, 0.4, 19.2, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(435, "Skuntank", Pokemon.VENENO, Pokemon.SINIESTRO, 1.0, 38.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(436, "Bronzor", Pokemon.ACERO, Pokemon.PSIQUICO, 0.5, 60.5, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(437, "Bronzong", Pokemon.ACERO, Pokemon.PSIQUICO, 1.3, 187.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(438, "Bonsly", Pokemon.ROCA, Pokemon.NINGUNO, 0.5, 15.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(439, "Mime-jr", Pokemon.PSIQUICO, Pokemon.HADA, 0.6, 13.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(440, "Happiny", Pokemon.NORMAL, Pokemon.NINGUNO, 0.6, 24.4, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(441, "Chatot", Pokemon.NORMAL, Pokemon.VOLADOR, 0.5, 1.9, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(442, "Spiritomb", Pokemon.FANTASMA, Pokemon.SINIESTRO, 1.0, 108.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(443, "Gible", Pokemon.DRAGON, Pokemon.TIERRA, 0.7, 20.5, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(444, "Gabite", Pokemon.DRAGON, Pokemon.TIERRA, 1.4, 56.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(445, "Garchomp", Pokemon.DRAGON, Pokemon.TIERRA, 1.9, 95.0, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(446, "Munchlax", Pokemon.NORMAL, Pokemon.NINGUNO, 0.6, 105.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(447, "Riolu", Pokemon.LUCHA, Pokemon.NINGUNO, 0.7, 20.2, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(448, "Lucario", Pokemon.LUCHA, Pokemon.ACERO, 1.2, 54.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(449, "Hippopotas", Pokemon.TIERRA, Pokemon.NINGUNO, 0.8, 49.5, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(450, "Hippowdon", Pokemon.TIERRA, Pokemon.NINGUNO, 2.0, 300.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(451, "Skorupi", Pokemon.VENENO, Pokemon.BICHO, 0.8, 12.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(452, "Drapion", Pokemon.VENENO, Pokemon.SINIESTRO, 1.3, 61.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(453, "Croagunk", Pokemon.VENENO, Pokemon.LUCHA, 0.7, 23.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(454, "Toxicroak", Pokemon.VENENO, Pokemon.LUCHA, 1.3, 44.4, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(455, "Carnivine", Pokemon.PLANTA, Pokemon.NINGUNO, 1.4, 27.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(456, "Finneon", Pokemon.AGUA, Pokemon.NINGUNO, 0.4, 7.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(457, "Lumineon", Pokemon.AGUA, Pokemon.NINGUNO, 1.2, 24.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(458, "Mantyke", Pokemon.AGUA, Pokemon.VOLADOR, 1.0, 65.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(459, "Snover", Pokemon.PLANTA, Pokemon.HIELO, 1.0, 50.5, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(460, "Abomasnow", Pokemon.PLANTA, Pokemon.HIELO, 2.2, 135.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(461, "Weavile", Pokemon.SINIESTRO, Pokemon.HIELO, 1.1, 34.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(462, "Magnezone", Pokemon.ELECTRICO, Pokemon.ACERO, 1.2, 180.0, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(463, "Lickilicky", Pokemon.NORMAL, Pokemon.NINGUNO, 1.7, 140.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(464, "Rhyperior", Pokemon.TIERRA, Pokemon.ROCA, 2.4, 282.8, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(465, "Tangrowth", Pokemon.PLANTA, Pokemon.NINGUNO, 2.0, 128.6, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(466, "Electivire", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.8, 138.6, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(467, "Magmortar", Pokemon.FUEGO, Pokemon.NINGUNO, 1.6, 68.0, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(468, "Togekiss", Pokemon.HADA, Pokemon.VOLADOR, 1.5, 38.0, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(469, "Yanmega", Pokemon.BICHO, Pokemon.VOLADOR, 1.9, 51.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(470, "Leafeon", Pokemon.PLANTA, Pokemon.NINGUNO, 1.0, 25.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(471, "Glaceon", Pokemon.HIELO, Pokemon.NINGUNO, 0.8, 25.9, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(472, "Gliscor", Pokemon.TIERRA, Pokemon.VOLADOR, 2.0, 42.5, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(473, "Mamoswine", Pokemon.HIELO, Pokemon.TIERRA, 2.5, 291.0, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(474, "Porygon-z", Pokemon.NORMAL, Pokemon.NINGUNO, 0.9, 34.0, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(475, "Gallade", Pokemon.PSIQUICO, Pokemon.LUCHA, 1.6, 52.0, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(476, "Probopass", Pokemon.ROCA, Pokemon.ACERO, 1.4, 340.0, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(477, "Dusknoir", Pokemon.FANTASMA, Pokemon.NINGUNO, 2.2, 106.6, 3, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(478, "Froslass", Pokemon.HIELO, Pokemon.FANTASMA, 1.3, 26.6, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(479, "Rotom", Pokemon.ELECTRICO, Pokemon.FANTASMA, 0.3, 0.3, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(480, "Uxie", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.3, 0.3, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(481, "Mesprit", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.3, 0.3, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(482, "Azelf", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.3, 0.3, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(483, "Dialga", Pokemon.ACERO, Pokemon.DRAGON, 5.4, 683.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(484, "Palkia", Pokemon.AGUA, Pokemon.DRAGON, 4.2, 336.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(485, "Heatran", Pokemon.FUEGO, Pokemon.ACERO, 1.7, 430.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(486, "Regigigas", Pokemon.NORMAL, Pokemon.NINGUNO, 3.7, 420.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(487, "Giratina-altered", Pokemon.FANTASMA, Pokemon.DRAGON, 4.5, 750.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(488, "Cresselia", Pokemon.PSIQUICO, Pokemon.NINGUNO, 1.5, 85.6, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(489, "Phione", Pokemon.AGUA, Pokemon.NINGUNO, 0.4, 3.1, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(490, "Manaphy", Pokemon.AGUA, Pokemon.NINGUNO, 0.3, 1.4, 2, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(491, "Darkrai", Pokemon.SINIESTRO, Pokemon.NINGUNO, 1.5, 50.5, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(492, "Shaymin-land", Pokemon.PLANTA, Pokemon.NINGUNO, 0.2, 2.1, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(493, "Arceus", Pokemon.NORMAL, Pokemon.NINGUNO, 3.2, 320.0, 1, Pokemon.SINNOH));
+        pokedex.add(new Pokemon(494, "Victini", Pokemon.PSIQUICO, Pokemon.FUEGO, 0.4, 4.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(495, "Snivy", Pokemon.PLANTA, Pokemon.NINGUNO, 0.6, 8.1, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(496, "Servine", Pokemon.PLANTA, Pokemon.NINGUNO, 0.8, 16.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(497, "Serperior", Pokemon.PLANTA, Pokemon.NINGUNO, 3.3, 63.0, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(498, "Tepig", Pokemon.FUEGO, Pokemon.NINGUNO, 0.5, 9.9, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(499, "Pignite", Pokemon.FUEGO, Pokemon.LUCHA, 1.0, 55.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(500, "Emboar", Pokemon.FUEGO, Pokemon.LUCHA, 1.6, 150.0, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(501, "Oshawott", Pokemon.AGUA, Pokemon.NINGUNO, 0.5, 5.9, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(502, "Dewott", Pokemon.AGUA, Pokemon.NINGUNO, 0.8, 24.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(503, "Samurott", Pokemon.AGUA, Pokemon.NINGUNO, 1.5, 94.6, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(504, "Patrat", Pokemon.NORMAL, Pokemon.NINGUNO, 0.5, 11.6, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(505, "Watchog", Pokemon.NORMAL, Pokemon.NINGUNO, 1.1, 27.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(506, "Lillipup", Pokemon.NORMAL, Pokemon.NINGUNO, 0.4, 4.1, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(507, "Herdier", Pokemon.NORMAL, Pokemon.NINGUNO, 0.9, 14.7, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(508, "Stoutland", Pokemon.NORMAL, Pokemon.NINGUNO, 1.2, 61.0, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(509, "Purrloin", Pokemon.SINIESTRO, Pokemon.NINGUNO, 0.4, 10.1, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(510, "Liepard", Pokemon.SINIESTRO, Pokemon.NINGUNO, 1.1, 37.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(511, "Pansage", Pokemon.PLANTA, Pokemon.NINGUNO, 0.6, 10.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(512, "Simisage", Pokemon.PLANTA, Pokemon.NINGUNO, 1.1, 30.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(513, "Pansear", Pokemon.FUEGO, Pokemon.NINGUNO, 0.6, 11.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(514, "Simisear", Pokemon.FUEGO, Pokemon.NINGUNO, 1.0, 28.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(515, "Panpour", Pokemon.AGUA, Pokemon.NINGUNO, 0.6, 13.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(516, "Simipour", Pokemon.AGUA, Pokemon.NINGUNO, 1.0, 29.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(517, "Munna", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.6, 23.3, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(518, "Musharna", Pokemon.PSIQUICO, Pokemon.NINGUNO, 1.1, 60.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(519, "Pidove", Pokemon.NORMAL, Pokemon.VOLADOR, 0.3, 2.1, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(520, "Tranquill", Pokemon.NORMAL, Pokemon.VOLADOR, 0.6, 15.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(521, "Unfezant", Pokemon.NORMAL, Pokemon.VOLADOR, 1.2, 29.0, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(522, "Blitzle", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.8, 29.8, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(523, "Zebstrika", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.6, 79.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(524, "Roggenrola", Pokemon.ROCA, Pokemon.NINGUNO, 0.4, 18.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(525, "Boldore", Pokemon.ROCA, Pokemon.NINGUNO, 0.9, 102.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(526, "Gigalith", Pokemon.ROCA, Pokemon.NINGUNO, 1.7, 260.0, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(527, "Woobat", Pokemon.PSIQUICO, Pokemon.VOLADOR, 0.4, 2.1, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(528, "Swoobat", Pokemon.PSIQUICO, Pokemon.VOLADOR, 0.9, 10.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(529, "Drilbur", Pokemon.TIERRA, Pokemon.NINGUNO, 0.3, 8.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(530, "Excadrill", Pokemon.TIERRA, Pokemon.ACERO, 0.7, 40.4, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(531, "Audino", Pokemon.NORMAL, Pokemon.NINGUNO, 1.1, 31.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(532, "Timburr", Pokemon.LUCHA, Pokemon.NINGUNO, 0.6, 12.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(533, "Gurdurr", Pokemon.LUCHA, Pokemon.NINGUNO, 1.2, 40.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(534, "Conkeldurr", Pokemon.LUCHA, Pokemon.NINGUNO, 1.4, 87.0, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(535, "Tympole", Pokemon.AGUA, Pokemon.NINGUNO, 0.5, 4.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(536, "Palpitoad", Pokemon.AGUA, Pokemon.TIERRA, 0.8, 17.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(537, "Seismitoad", Pokemon.AGUA, Pokemon.TIERRA, 1.5, 62.0, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(538, "Throh", Pokemon.LUCHA, Pokemon.NINGUNO, 1.3, 55.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(539, "Sawk", Pokemon.LUCHA, Pokemon.NINGUNO, 1.4, 51.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(540, "Sewaddle", Pokemon.BICHO, Pokemon.PLANTA, 0.3, 2.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(541, "Swadloon", Pokemon.BICHO, Pokemon.PLANTA, 0.5, 7.3, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(542, "Leavanny", Pokemon.BICHO, Pokemon.PLANTA, 1.2, 20.5, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(543, "Venipede", Pokemon.BICHO, Pokemon.VENENO, 0.4, 5.3, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(544, "Whirlipede", Pokemon.BICHO, Pokemon.VENENO, 1.2, 58.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(545, "Scolipede", Pokemon.BICHO, Pokemon.VENENO, 2.5, 200.5, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(546, "Cottonee", Pokemon.PLANTA, Pokemon.HADA, 0.3, 0.6, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(547, "Whimsicott", Pokemon.PLANTA, Pokemon.HADA, 0.7, 6.6, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(548, "Petilil", Pokemon.PLANTA, Pokemon.NINGUNO, 0.5, 6.6, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(549, "Lilligant", Pokemon.PLANTA, Pokemon.NINGUNO, 1.1, 16.3, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(550, "Basculin-red-striped", Pokemon.AGUA, Pokemon.NINGUNO, 1.0, 18.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(551, "Sandile", Pokemon.TIERRA, Pokemon.SINIESTRO, 0.7, 15.2, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(552, "Krokorok", Pokemon.TIERRA, Pokemon.SINIESTRO, 1.0, 33.4, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(553, "Krookodile", Pokemon.TIERRA, Pokemon.SINIESTRO, 1.5, 96.3, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(554, "Darumaka", Pokemon.FUEGO, Pokemon.NINGUNO, 0.6, 37.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(555, "Darmanitan-standard", Pokemon.FUEGO, Pokemon.NINGUNO, 1.3, 92.9, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(556, "Maractus", Pokemon.PLANTA, Pokemon.NINGUNO, 1.0, 28.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(557, "Dwebble", Pokemon.BICHO, Pokemon.ROCA, 0.3, 14.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(558, "Crustle", Pokemon.BICHO, Pokemon.ROCA, 1.4, 200.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(559, "Scraggy", Pokemon.SINIESTRO, Pokemon.LUCHA, 0.6, 11.8, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(560, "Scrafty", Pokemon.SINIESTRO, Pokemon.LUCHA, 1.1, 30.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(561, "Sigilyph", Pokemon.PSIQUICO, Pokemon.VOLADOR, 1.4, 14.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(562, "Yamask", Pokemon.FANTASMA, Pokemon.NINGUNO, 0.5, 1.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(563, "Cofagrigus", Pokemon.FANTASMA, Pokemon.NINGUNO, 1.7, 76.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(564, "Tirtouga", Pokemon.AGUA, Pokemon.ROCA, 0.7, 16.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(565, "Carracosta", Pokemon.AGUA, Pokemon.ROCA, 1.2, 81.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(566, "Archen", Pokemon.ROCA, Pokemon.VOLADOR, 0.5, 9.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(567, "Archeops", Pokemon.ROCA, Pokemon.VOLADOR, 1.4, 32.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(568, "Trubbish", Pokemon.VENENO, Pokemon.NINGUNO, 0.6, 31.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(569, "Garbodor", Pokemon.VENENO, Pokemon.NINGUNO, 1.9, 107.3, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(570, "Zorua", Pokemon.SINIESTRO, Pokemon.NINGUNO, 0.7, 12.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(571, "Zoroark", Pokemon.SINIESTRO, Pokemon.NINGUNO, 1.6, 81.1, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(572, "Minccino", Pokemon.NORMAL, Pokemon.NINGUNO, 0.4, 5.8, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(573, "Cinccino", Pokemon.NORMAL, Pokemon.NINGUNO, 0.5, 7.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(574, "Gothita", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.4, 5.8, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(575, "Gothorita", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.7, 18.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(576, "Gothitelle", Pokemon.PSIQUICO, Pokemon.NINGUNO, 1.5, 44.0, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(577, "Solosis", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.3, 1.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(578, "Duosion", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.6, 8.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(579, "Reuniclus", Pokemon.PSIQUICO, Pokemon.NINGUNO, 1.0, 20.1, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(580, "Ducklett", Pokemon.AGUA, Pokemon.VOLADOR, 0.5, 5.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(581, "Swanna", Pokemon.AGUA, Pokemon.VOLADOR, 1.3, 24.2, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(582, "Vanillite", Pokemon.HIELO, Pokemon.NINGUNO, 0.4, 5.7, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(583, "Vanillish", Pokemon.HIELO, Pokemon.NINGUNO, 1.1, 41.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(584, "Vanilluxe", Pokemon.HIELO, Pokemon.NINGUNO, 1.3, 57.5, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(585, "Deerling", Pokemon.NORMAL, Pokemon.PLANTA, 0.6, 19.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(586, "Sawsbuck", Pokemon.NORMAL, Pokemon.PLANTA, 1.9, 92.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(587, "Emolga", Pokemon.ELECTRICO, Pokemon.VOLADOR, 0.4, 5.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(588, "Karrablast", Pokemon.BICHO, Pokemon.NINGUNO, 0.5, 5.9, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(589, "Escavalier", Pokemon.BICHO, Pokemon.ACERO, 1.0, 33.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(590, "Foongus", Pokemon.PLANTA, Pokemon.VENENO, 0.2, 1.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(591, "Amoonguss", Pokemon.PLANTA, Pokemon.VENENO, 0.6, 10.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(592, "Frillish", Pokemon.AGUA, Pokemon.FANTASMA, 1.2, 33.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(593, "Jellicent", Pokemon.AGUA, Pokemon.FANTASMA, 2.2, 135.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(594, "Alomomola", Pokemon.AGUA, Pokemon.NINGUNO, 1.2, 31.6, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(595, "Joltik", Pokemon.BICHO, Pokemon.ELECTRICO, 0.1, 0.6, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(596, "Galvantula", Pokemon.BICHO, Pokemon.ELECTRICO, 0.8, 14.3, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(597, "Ferroseed", Pokemon.PLANTA, Pokemon.ACERO, 0.6, 18.8, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(598, "Ferrothorn", Pokemon.PLANTA, Pokemon.ACERO, 1.0, 110.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(599, "Klink", Pokemon.ACERO, Pokemon.NINGUNO, 0.3, 21.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(600, "Klang", Pokemon.ACERO, Pokemon.NINGUNO, 0.6, 51.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(601, "Klinklang", Pokemon.ACERO, Pokemon.NINGUNO, 0.6, 81.0, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(602, "Tynamo", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.2, 0.3, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(603, "Eelektrik", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.2, 22.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(604, "Eelektross", Pokemon.ELECTRICO, Pokemon.NINGUNO, 2.1, 80.5, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(605, "Elgyem", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.5, 9.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(606, "Beheeyem", Pokemon.PSIQUICO, Pokemon.NINGUNO, 1.0, 34.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(607, "Litwick", Pokemon.FANTASMA, Pokemon.FUEGO, 0.3, 3.1, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(608, "Lampent", Pokemon.FANTASMA, Pokemon.FUEGO, 0.6, 13.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(609, "Chandelure", Pokemon.FANTASMA, Pokemon.FUEGO, 1.0, 34.3, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(610, "Axew", Pokemon.DRAGON, Pokemon.NINGUNO, 0.6, 18.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(611, "Fraxure", Pokemon.DRAGON, Pokemon.NINGUNO, 1.0, 36.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(612, "Haxorus", Pokemon.DRAGON, Pokemon.NINGUNO, 1.8, 105.5, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(613, "Cubchoo", Pokemon.HIELO, Pokemon.NINGUNO, 0.5, 8.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(614, "Beartic", Pokemon.HIELO, Pokemon.NINGUNO, 2.6, 260.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(615, "Cryogonal", Pokemon.HIELO, Pokemon.NINGUNO, 1.1, 148.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(616, "Shelmet", Pokemon.BICHO, Pokemon.NINGUNO, 0.4, 7.7, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(617, "Accelgor", Pokemon.BICHO, Pokemon.NINGUNO, 0.8, 25.3, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(618, "Stunfisk", Pokemon.TIERRA, Pokemon.ELECTRICO, 0.7, 11.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(619, "Mienfoo", Pokemon.LUCHA, Pokemon.NINGUNO, 0.9, 20.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(620, "Mienshao", Pokemon.LUCHA, Pokemon.NINGUNO, 1.4, 35.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(621, "Druddigon", Pokemon.DRAGON, Pokemon.NINGUNO, 1.6, 139.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(622, "Golett", Pokemon.TIERRA, Pokemon.FANTASMA, 1.0, 92.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(623, "Golurk", Pokemon.TIERRA, Pokemon.FANTASMA, 2.8, 330.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(624, "Pawniard", Pokemon.SINIESTRO, Pokemon.ACERO, 0.5, 10.2, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(625, "Bisharp", Pokemon.SINIESTRO, Pokemon.ACERO, 1.6, 70.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(626, "Bouffalant", Pokemon.NORMAL, Pokemon.NINGUNO, 1.6, 94.6, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(627, "Rufflet", Pokemon.NORMAL, Pokemon.VOLADOR, 0.5, 10.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(628, "Braviary", Pokemon.NORMAL, Pokemon.VOLADOR, 1.5, 41.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(629, "Vullaby", Pokemon.SINIESTRO, Pokemon.VOLADOR, 0.5, 9.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(630, "Mandibuzz", Pokemon.SINIESTRO, Pokemon.VOLADOR, 1.2, 39.5, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(631, "Heatmor", Pokemon.FUEGO, Pokemon.NINGUNO, 1.4, 58.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(632, "Durant", Pokemon.BICHO, Pokemon.ACERO, 0.3, 33.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(633, "Deino", Pokemon.SINIESTRO, Pokemon.DRAGON, 0.8, 17.3, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(634, "Zweilous", Pokemon.SINIESTRO, Pokemon.DRAGON, 1.4, 50.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(635, "Hydreigon", Pokemon.SINIESTRO, Pokemon.DRAGON, 1.8, 160.0, 3, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(636, "Larvesta", Pokemon.BICHO, Pokemon.FUEGO, 1.1, 28.8, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(637, "Volcarona", Pokemon.BICHO, Pokemon.FUEGO, 1.6, 46.0, 2, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(638, "Cobalion", Pokemon.ACERO, Pokemon.LUCHA, 2.1, 250.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(639, "Terrakion", Pokemon.ROCA, Pokemon.LUCHA, 1.9, 260.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(640, "Virizion", Pokemon.PLANTA, Pokemon.LUCHA, 2.0, 200.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(641, "Tornadus-incarnate", Pokemon.VOLADOR, Pokemon.NINGUNO, 1.5, 63.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(642, "Thundurus-incarnate", Pokemon.ELECTRICO, Pokemon.VOLADOR, 1.5, 61.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(643, "Reshiram", Pokemon.DRAGON, Pokemon.FUEGO, 3.2, 330.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(644, "Zekrom", Pokemon.DRAGON, Pokemon.ELECTRICO, 2.9, 345.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(645, "Landorus-incarnate", Pokemon.TIERRA, Pokemon.VOLADOR, 1.5, 68.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(646, "Kyurem", Pokemon.DRAGON, Pokemon.HIELO, 3.0, 325.0, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(647, "Keldeo-ordinary", Pokemon.AGUA, Pokemon.LUCHA, 1.4, 48.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(648, "Meloetta-aria", Pokemon.NORMAL, Pokemon.PSIQUICO, 0.6, 6.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(649, "Genesect", Pokemon.BICHO, Pokemon.ACERO, 1.5, 82.5, 1, Pokemon.TESELIA));
+        pokedex.add(new Pokemon(650, "Chespin", Pokemon.PLANTA, Pokemon.NINGUNO, 0.4, 9.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(651, "Quilladin", Pokemon.PLANTA, Pokemon.NINGUNO, 0.7, 29.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(652, "Chesnaught", Pokemon.PLANTA, Pokemon.LUCHA, 1.6, 90.0, 3, Pokemon.KALOS));
+        pokedex.add(new Pokemon(653, "Fennekin", Pokemon.FUEGO, Pokemon.NINGUNO, 0.4, 9.4, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(654, "Braixen", Pokemon.FUEGO, Pokemon.NINGUNO, 1.0, 14.5, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(655, "Delphox", Pokemon.FUEGO, Pokemon.PSIQUICO, 1.5, 39.0, 3, Pokemon.KALOS));
+        pokedex.add(new Pokemon(656, "Froakie", Pokemon.AGUA, Pokemon.NINGUNO, 0.3, 7.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(657, "Frogadier", Pokemon.AGUA, Pokemon.NINGUNO, 0.6, 10.9, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(658, "Greninja", Pokemon.AGUA, Pokemon.SINIESTRO, 1.5, 40.0, 3, Pokemon.KALOS));
+        pokedex.add(new Pokemon(659, "Bunnelby", Pokemon.NORMAL, Pokemon.NINGUNO, 0.4, 5.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(660, "Diggersby", Pokemon.NORMAL, Pokemon.TIERRA, 1.0, 42.4, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(661, "Fletchling", Pokemon.NORMAL, Pokemon.VOLADOR, 0.3, 1.7, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(662, "Fletchinder", Pokemon.FUEGO, Pokemon.VOLADOR, 0.7, 16.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(663, "Talonflame", Pokemon.FUEGO, Pokemon.VOLADOR, 1.2, 24.5, 3, Pokemon.KALOS));
+        pokedex.add(new Pokemon(664, "Scatterbug", Pokemon.BICHO, Pokemon.NINGUNO, 0.3, 2.5, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(665, "Spewpa", Pokemon.BICHO, Pokemon.NINGUNO, 0.3, 8.4, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(666, "Vivillon", Pokemon.BICHO, Pokemon.VOLADOR, 1.2, 17.0, 3, Pokemon.KALOS));
+        pokedex.add(new Pokemon(667, "Litleo", Pokemon.FUEGO, Pokemon.NORMAL, 0.6, 13.5, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(668, "Pyroar", Pokemon.FUEGO, Pokemon.NORMAL, 1.5, 81.5, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(669, "Flabebe", Pokemon.HADA, Pokemon.NINGUNO, 0.1, 0.1, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(670, "Floette", Pokemon.HADA, Pokemon.NINGUNO, 0.2, 0.9, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(671, "Florges", Pokemon.HADA, Pokemon.NINGUNO, 1.1, 10.0, 3, Pokemon.KALOS));
+        pokedex.add(new Pokemon(672, "Skiddo", Pokemon.PLANTA, Pokemon.NINGUNO, 0.9, 31.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(673, "Gogoat", Pokemon.PLANTA, Pokemon.NINGUNO, 1.7, 91.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(674, "Pancham", Pokemon.LUCHA, Pokemon.NINGUNO, 0.6, 8.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(675, "Pangoro", Pokemon.LUCHA, Pokemon.SINIESTRO, 2.1, 136.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(676, "Furfrou", Pokemon.NORMAL, Pokemon.NINGUNO, 1.2, 28.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(677, "Espurr", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.3, 3.5, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(678, "Meowstic-male", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.6, 8.5, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(679, "Honedge", Pokemon.ACERO, Pokemon.FANTASMA, 0.8, 2.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(680, "Doublade", Pokemon.ACERO, Pokemon.FANTASMA, 0.8, 4.5, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(681, "Aegislash-shield", Pokemon.ACERO, Pokemon.FANTASMA, 1.7, 53.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(682, "Spritzee", Pokemon.HADA, Pokemon.NINGUNO, 0.2, 0.5, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(683, "Aromatisse", Pokemon.HADA, Pokemon.NINGUNO, 0.8, 15.5, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(684, "Swirlix", Pokemon.HADA, Pokemon.NINGUNO, 0.4, 3.5, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(685, "Slurpuff", Pokemon.HADA, Pokemon.NINGUNO, 0.8, 5.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(686, "Inkay", Pokemon.SINIESTRO, Pokemon.PSIQUICO, 0.4, 3.5, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(687, "Malamar", Pokemon.SINIESTRO, Pokemon.PSIQUICO, 1.5, 47.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(688, "Binacle", Pokemon.ROCA, Pokemon.AGUA, 0.5, 31.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(689, "Barbaracle", Pokemon.ROCA, Pokemon.AGUA, 1.3, 96.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(690, "Skrelp", Pokemon.VENENO, Pokemon.AGUA, 0.5, 7.3, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(691, "Dragalge", Pokemon.VENENO, Pokemon.DRAGON, 1.8, 81.5, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(692, "Clauncher", Pokemon.AGUA, Pokemon.NINGUNO, 0.5, 8.3, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(693, "Clawitzer", Pokemon.AGUA, Pokemon.NINGUNO, 1.3, 35.3, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(694, "Helioptile", Pokemon.ELECTRICO, Pokemon.NORMAL, 0.5, 6.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(695, "Heliolisk", Pokemon.ELECTRICO, Pokemon.NORMAL, 1.0, 21.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(696, "Tyrunt", Pokemon.ROCA, Pokemon.DRAGON, 0.8, 26.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(697, "Tyrantrum", Pokemon.ROCA, Pokemon.DRAGON, 2.5, 270.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(698, "Amaura", Pokemon.ROCA, Pokemon.HIELO, 1.3, 25.2, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(699, "Aurorus", Pokemon.ROCA, Pokemon.HIELO, 2.7, 225.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(700, "Sylveon", Pokemon.HADA, Pokemon.NINGUNO, 1.0, 23.5, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(701, "Hawlucha", Pokemon.LUCHA, Pokemon.VOLADOR, 0.8, 21.5, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(702, "Dedenne", Pokemon.ELECTRICO, Pokemon.HADA, 0.2, 2.2, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(703, "Carbink", Pokemon.ROCA, Pokemon.HADA, 0.3, 5.7, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(704, "Goomy", Pokemon.DRAGON, Pokemon.NINGUNO, 0.3, 2.8, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(705, "Sliggoo", Pokemon.DRAGON, Pokemon.NINGUNO, 0.8, 17.5, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(706, "Goodra", Pokemon.DRAGON, Pokemon.NINGUNO, 2.0, 150.5, 3, Pokemon.KALOS));
+        pokedex.add(new Pokemon(707, "Klefki", Pokemon.ACERO, Pokemon.HADA, 0.2, 3.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(708, "Phantump", Pokemon.FANTASMA, Pokemon.PLANTA, 0.4, 7.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(709, "Trevenant", Pokemon.FANTASMA, Pokemon.PLANTA, 1.5, 71.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(710, "Pumpkaboo-average", Pokemon.FANTASMA, Pokemon.PLANTA, 0.4, 5.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(711, "Gourgeist-average", Pokemon.FANTASMA, Pokemon.PLANTA, 0.9, 12.5, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(712, "Bergmite", Pokemon.HIELO, Pokemon.NINGUNO, 1.0, 99.5, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(713, "Avalugg", Pokemon.HIELO, Pokemon.NINGUNO, 2.0, 505.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(714, "Noibat", Pokemon.VOLADOR, Pokemon.DRAGON, 0.5, 8.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(715, "Noivern", Pokemon.VOLADOR, Pokemon.DRAGON, 1.5, 85.0, 2, Pokemon.KALOS));
+        pokedex.add(new Pokemon(716, "Xerneas", Pokemon.HADA, Pokemon.NINGUNO, 3.0, 215.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(717, "Yveltal", Pokemon.SINIESTRO, Pokemon.VOLADOR, 5.8, 203.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(718, "Zygarde-50", Pokemon.DRAGON, Pokemon.TIERRA, 5.0, 305.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(719, "Diancie", Pokemon.ROCA, Pokemon.HADA, 0.7, 8.8, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(720, "Hoopa", Pokemon.PSIQUICO, Pokemon.FANTASMA, 0.5, 9.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(721, "Volcanion", Pokemon.FUEGO, Pokemon.AGUA, 1.7, 195.0, 1, Pokemon.KALOS));
+        pokedex.add(new Pokemon(722, "Rowlet", Pokemon.PLANTA, Pokemon.VOLADOR, 0.3, 1.5, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(723, "Dartrix", Pokemon.PLANTA, Pokemon.VOLADOR, 0.7, 16.0, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(724, "Decidueye", Pokemon.PLANTA, Pokemon.FANTASMA, 1.6, 36.6, 3, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(725, "Litten", Pokemon.FUEGO, Pokemon.NINGUNO, 0.4, 4.3, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(726, "Torracat", Pokemon.FUEGO, Pokemon.NINGUNO, 0.7, 25.0, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(727, "Incineroar", Pokemon.FUEGO, Pokemon.SINIESTRO, 1.8, 83.0, 3, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(728, "Popplio", Pokemon.AGUA, Pokemon.NINGUNO, 0.4, 7.5, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(729, "Brionne", Pokemon.AGUA, Pokemon.NINGUNO, 0.6, 17.5, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(730, "Primarina", Pokemon.AGUA, Pokemon.HADA, 1.8, 44.0, 3, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(731, "Pikipek", Pokemon.NORMAL, Pokemon.VOLADOR, 0.3, 1.2, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(732, "Trumbeak", Pokemon.NORMAL, Pokemon.VOLADOR, 0.6, 14.8, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(733, "Toucannon", Pokemon.NORMAL, Pokemon.VOLADOR, 1.1, 26.0, 3, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(734, "Yungoos", Pokemon.NORMAL, Pokemon.NINGUNO, 0.4, 6.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(735, "Gumshoos", Pokemon.NORMAL, Pokemon.NINGUNO, 0.7, 14.2, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(736, "Grubbin", Pokemon.BICHO, Pokemon.NINGUNO, 0.4, 4.4, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(737, "Charjabug", Pokemon.BICHO, Pokemon.ELECTRICO, 0.5, 10.5, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(738, "Vikavolt", Pokemon.BICHO, Pokemon.ELECTRICO, 1.5, 45.0, 3, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(739, "Crabrawler", Pokemon.LUCHA, Pokemon.NINGUNO, 0.6, 7.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(740, "Crabominable", Pokemon.LUCHA, Pokemon.HIELO, 1.7, 180.0, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(741, "Oricorio-baile", Pokemon.FUEGO, Pokemon.VOLADOR, 0.6, 3.4, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(742, "Cutiefly", Pokemon.BICHO, Pokemon.HADA, 0.1, 0.2, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(743, "Ribombee", Pokemon.BICHO, Pokemon.HADA, 0.2, 0.5, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(744, "Rockruff", Pokemon.ROCA, Pokemon.NINGUNO, 0.5, 9.2, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(745, "Lycanroc-midday", Pokemon.ROCA, Pokemon.NINGUNO, 0.8, 25.0, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(746, "Wishiwashi-solo", Pokemon.AGUA, Pokemon.NINGUNO, 0.2, 0.3, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(747, "Mareanie", Pokemon.VENENO, Pokemon.AGUA, 0.4, 8.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(748, "Toxapex", Pokemon.VENENO, Pokemon.AGUA, 0.7, 14.5, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(749, "Mudbray", Pokemon.TIERRA, Pokemon.NINGUNO, 1.0, 110.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(750, "Mudsdale", Pokemon.TIERRA, Pokemon.NINGUNO, 2.5, 920.0, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(751, "Dewpider", Pokemon.AGUA, Pokemon.BICHO, 0.3, 4.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(752, "Araquanid", Pokemon.AGUA, Pokemon.BICHO, 1.8, 82.0, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(753, "Fomantis", Pokemon.PLANTA, Pokemon.NINGUNO, 0.3, 1.5, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(754, "Lurantis", Pokemon.PLANTA, Pokemon.NINGUNO, 0.9, 18.5, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(755, "Morelull", Pokemon.PLANTA, Pokemon.HADA, 0.2, 1.5, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(756, "Shiinotic", Pokemon.PLANTA, Pokemon.HADA, 1.0, 11.5, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(757, "Salandit", Pokemon.VENENO, Pokemon.FUEGO, 0.6, 4.8, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(758, "Salazzle", Pokemon.VENENO, Pokemon.FUEGO, 1.2, 22.2, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(759, "Stufful", Pokemon.NORMAL, Pokemon.LUCHA, 0.5, 6.8, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(760, "Bewear", Pokemon.NORMAL, Pokemon.LUCHA, 2.1, 135.0, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(761, "Bounsweet", Pokemon.PLANTA, Pokemon.NINGUNO, 0.3, 3.2, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(762, "Steenee", Pokemon.PLANTA, Pokemon.NINGUNO, 0.7, 8.2, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(763, "Tsareena", Pokemon.PLANTA, Pokemon.NINGUNO, 1.2, 21.4, 3, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(764, "Comfey", Pokemon.HADA, Pokemon.NINGUNO, 0.1, 0.3, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(765, "Oranguru", Pokemon.NORMAL, Pokemon.PSIQUICO, 1.5, 76.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(766, "Passimian", Pokemon.LUCHA, Pokemon.NINGUNO, 2.0, 82.8, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(767, "Wimpod", Pokemon.BICHO, Pokemon.AGUA, 0.5, 12.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(768, "Golisopod", Pokemon.BICHO, Pokemon.AGUA, 2.0, 108.0, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(769, "Sandygast", Pokemon.FANTASMA, Pokemon.TIERRA, 0.5, 70.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(770, "Palossand", Pokemon.FANTASMA, Pokemon.TIERRA, 1.3, 250.0, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(771, "Pyukumuku", Pokemon.AGUA, Pokemon.NINGUNO, 0.3, 1.2, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(772, "Type-null", Pokemon.NORMAL, Pokemon.NINGUNO, 1.9, 120.5, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(773, "Silvally", Pokemon.NORMAL, Pokemon.NINGUNO, 2.3, 100.5, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(774, "Minior-red-meteor", Pokemon.ROCA, Pokemon.VOLADOR, 0.3, 40.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(775, "Komala", Pokemon.NORMAL, Pokemon.NINGUNO, 0.4, 19.9, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(776, "Turtonator", Pokemon.FUEGO, Pokemon.DRAGON, 2.0, 212.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(777, "Togedemaru", Pokemon.ELECTRICO, Pokemon.ACERO, 0.3, 3.3, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(778, "Mimikyu-disguised", Pokemon.FANTASMA, Pokemon.HADA, 0.2, 0.7, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(779, "Bruxish", Pokemon.AGUA, Pokemon.PSIQUICO, 0.9, 19.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(780, "Drampa", Pokemon.NORMAL, Pokemon.DRAGON, 3.0, 185.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(781, "Dhelmise", Pokemon.FANTASMA, Pokemon.PLANTA, 3.9, 210.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(782, "Jangmo-o", Pokemon.DRAGON, Pokemon.NINGUNO, 0.6, 29.7, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(783, "Hakamo-o", Pokemon.DRAGON, Pokemon.LUCHA, 1.2, 47.0, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(784, "Kommo-o", Pokemon.DRAGON, Pokemon.LUCHA, 1.6, 78.2, 3, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(785, "Tapu-koko", Pokemon.ELECTRICO, Pokemon.HADA, 1.8, 20.5, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(786, "Tapu-lele", Pokemon.PSIQUICO, Pokemon.HADA, 1.2, 18.6, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(787, "Tapu-bulu", Pokemon.PLANTA, Pokemon.HADA, 1.9, 45.5, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(788, "Tapu-fini", Pokemon.AGUA, Pokemon.HADA, 1.3, 21.2, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(789, "Cosmog", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.2, 0.1, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(790, "Cosmoem", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.1, 999.9, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(791, "Solgaleo", Pokemon.PSIQUICO, Pokemon.ACERO, 3.4, 230.0, 3, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(792, "Lunala", Pokemon.PSIQUICO, Pokemon.FANTASMA, 4.0, 120.0, 3, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(793, "Nihilego", Pokemon.ROCA, Pokemon.VENENO, 1.2, 55.5, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(794, "Buzzwole", Pokemon.BICHO, Pokemon.LUCHA, 2.4, 333.6, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(795, "Pheromosa", Pokemon.BICHO, Pokemon.LUCHA, 1.8, 25.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(796, "Xurkitree", Pokemon.ELECTRICO, Pokemon.NINGUNO, 3.8, 100.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(797, "Celesteela", Pokemon.ACERO, Pokemon.VOLADOR, 9.2, 999.9, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(798, "Kartana", Pokemon.PLANTA, Pokemon.ACERO, 0.3, 0.1, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(799, "Guzzlord", Pokemon.SINIESTRO, Pokemon.DRAGON, 5.5, 888.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(800, "Necrozma", Pokemon.PSIQUICO, Pokemon.NINGUNO, 2.4, 230.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(801, "Magearna", Pokemon.ACERO, Pokemon.HADA, 1.0, 80.5, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(802, "Marshadow", Pokemon.LUCHA, Pokemon.FANTASMA, 0.7, 22.2, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(803, "Poipole", Pokemon.VENENO, Pokemon.NINGUNO, 0.6, 1.8, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(804, "Naganadel", Pokemon.VENENO, Pokemon.DRAGON, 3.6, 150.0, 2, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(805, "Stakataka", Pokemon.ROCA, Pokemon.ACERO, 5.5, 820.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(806, "Blacephalon", Pokemon.FUEGO, Pokemon.FANTASMA, 1.8, 13.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(807, "Zeraora", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.5, 44.5, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(808, "Meltan", Pokemon.ACERO, Pokemon.NINGUNO, 0.2, 8.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(809, "Melmetal", Pokemon.ACERO, Pokemon.NINGUNO, 2.5, 800.0, 1, Pokemon.ALOLA));
+        pokedex.add(new Pokemon(810, "Grookey", Pokemon.PLANTA, Pokemon.NINGUNO, 0.3, 5.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(811, "Thwackey", Pokemon.PLANTA, Pokemon.NINGUNO, 0.7, 14.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(812, "Rillaboom", Pokemon.PLANTA, Pokemon.NINGUNO, 2.1, 90.0, 3, Pokemon.GALAR));
+        pokedex.add(new Pokemon(813, "Scorbunny", Pokemon.FUEGO, Pokemon.NINGUNO, 0.3, 4.5, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(814, "Raboot", Pokemon.FUEGO, Pokemon.NINGUNO, 0.6, 9.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(815, "Cinderace", Pokemon.FUEGO, Pokemon.NINGUNO, 1.4, 33.0, 3, Pokemon.GALAR));
+        pokedex.add(new Pokemon(816, "Sobble", Pokemon.AGUA, Pokemon.NINGUNO, 0.3, 4.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(817, "Drizzile", Pokemon.AGUA, Pokemon.NINGUNO, 0.7, 11.5, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(818, "Inteleon", Pokemon.AGUA, Pokemon.NINGUNO, 1.9, 45.2, 3, Pokemon.GALAR));
+        pokedex.add(new Pokemon(819, "Skwovet", Pokemon.NORMAL, Pokemon.NINGUNO, 0.3, 2.5, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(820, "Greedent", Pokemon.NORMAL, Pokemon.NINGUNO, 0.6, 6.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(821, "Rookidee", Pokemon.VOLADOR, Pokemon.NINGUNO, 0.2, 1.8, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(822, "Corvisquire", Pokemon.VOLADOR, Pokemon.NINGUNO, 0.8, 16.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(823, "Corviknight", Pokemon.VOLADOR, Pokemon.ACERO, 2.2, 75.0, 3, Pokemon.GALAR));
+        pokedex.add(new Pokemon(824, "Blipbug", Pokemon.BICHO, Pokemon.NINGUNO, 0.4, 8.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(825, "Dottler", Pokemon.BICHO, Pokemon.PSIQUICO, 0.4, 19.5, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(826, "Orbeetle", Pokemon.BICHO, Pokemon.PSIQUICO, 0.4, 40.8, 3, Pokemon.GALAR));
+        pokedex.add(new Pokemon(827, "Nickit", Pokemon.SINIESTRO, Pokemon.NINGUNO, 0.6, 8.9, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(828, "Thievul", Pokemon.SINIESTRO, Pokemon.NINGUNO, 1.2, 19.9, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(829, "Gossifleur", Pokemon.PLANTA, Pokemon.NINGUNO, 0.4, 2.2, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(830, "Eldegoss", Pokemon.PLANTA, Pokemon.NINGUNO, 0.5, 2.5, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(831, "Wooloo", Pokemon.NORMAL, Pokemon.NINGUNO, 0.6, 6.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(832, "Dubwool", Pokemon.NORMAL, Pokemon.NINGUNO, 1.3, 43.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(833, "Chewtle", Pokemon.AGUA, Pokemon.NINGUNO, 0.3, 8.5, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(834, "Drednaw", Pokemon.AGUA, Pokemon.ROCA, 1.0, 115.5, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(835, "Yamper", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.3, 13.5, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(836, "Boltund", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.0, 34.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(837, "Rolycoly", Pokemon.ROCA, Pokemon.NINGUNO, 0.3, 12.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(838, "Carkol", Pokemon.ROCA, Pokemon.FUEGO, 1.1, 78.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(839, "Coalossal", Pokemon.ROCA, Pokemon.FUEGO, 2.8, 310.5, 3, Pokemon.GALAR));
+        pokedex.add(new Pokemon(840, "Applin", Pokemon.PLANTA, Pokemon.DRAGON, 0.2, 0.5, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(841, "Flapple", Pokemon.PLANTA, Pokemon.DRAGON, 0.3, 1.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(842, "Appletun", Pokemon.PLANTA, Pokemon.DRAGON, 0.4, 13.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(843, "Silicobra", Pokemon.TIERRA, Pokemon.NINGUNO, 2.2, 7.6, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(844, "Sandaconda", Pokemon.TIERRA, Pokemon.NINGUNO, 3.8, 65.5, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(845, "Cramorant", Pokemon.VOLADOR, Pokemon.AGUA, 0.8, 18.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(846, "Arrokuda", Pokemon.AGUA, Pokemon.NINGUNO, 0.5, 1.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(847, "Barraskewda", Pokemon.AGUA, Pokemon.NINGUNO, 1.3, 30.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(848, "Toxel", Pokemon.ELECTRICO, Pokemon.VENENO, 0.4, 11.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(849, "Toxtricity-amped", Pokemon.ELECTRICO, Pokemon.VENENO, 1.6, 40.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(850, "Sizzlipede", Pokemon.FUEGO, Pokemon.BICHO, 0.7, 1.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(851, "Centiskorch", Pokemon.FUEGO, Pokemon.BICHO, 3.0, 120.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(852, "Clobbopus", Pokemon.LUCHA, Pokemon.NINGUNO, 0.6, 4.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(853, "Grapploct", Pokemon.LUCHA, Pokemon.NINGUNO, 1.6, 39.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(854, "Sinistea", Pokemon.FANTASMA, Pokemon.NINGUNO, 0.1, 0.2, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(855, "Polteageist", Pokemon.FANTASMA, Pokemon.NINGUNO, 0.2, 0.4, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(856, "Hatenna", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.4, 3.4, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(857, "Hattrem", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.6, 4.8, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(858, "Hatterene", Pokemon.PSIQUICO, Pokemon.HADA, 2.1, 5.1, 3, Pokemon.GALAR));
+        pokedex.add(new Pokemon(859, "Impidimp", Pokemon.SINIESTRO, Pokemon.HADA, 0.4, 5.5, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(860, "Morgrem", Pokemon.SINIESTRO, Pokemon.HADA, 0.8, 12.5, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(861, "Grimmsnarl", Pokemon.SINIESTRO, Pokemon.HADA, 1.5, 61.0, 3, Pokemon.GALAR));
+        pokedex.add(new Pokemon(862, "Obstagoon", Pokemon.SINIESTRO, Pokemon.NORMAL, 1.6, 46.0, 3, Pokemon.GALAR));
+        pokedex.add(new Pokemon(863, "Perrserker", Pokemon.ACERO, Pokemon.NINGUNO, 0.8, 28.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(864, "Cursola", Pokemon.FANTASMA, Pokemon.NINGUNO, 1.0, 0.4, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(865, "Sirfetchd", Pokemon.LUCHA, Pokemon.NINGUNO, 0.8, 117.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(866, "Mr-rime", Pokemon.HIELO, Pokemon.PSIQUICO, 1.5, 58.2, 3, Pokemon.GALAR));
+        pokedex.add(new Pokemon(867, "Runerigus", Pokemon.TIERRA, Pokemon.FANTASMA, 1.6, 66.6, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(868, "Milcery", Pokemon.HADA, Pokemon.NINGUNO, 0.2, 0.3, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(869, "Alcremie", Pokemon.HADA, Pokemon.NINGUNO, 0.3, 0.5, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(870, "Falinks", Pokemon.LUCHA, Pokemon.NINGUNO, 3.0, 62.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(871, "Pincurchin", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.3, 1.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(872, "Snom", Pokemon.HIELO, Pokemon.BICHO, 0.3, 3.8, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(873, "Frosmoth", Pokemon.HIELO, Pokemon.BICHO, 1.3, 42.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(874, "Stonjourner", Pokemon.ROCA, Pokemon.NINGUNO, 2.5, 520.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(875, "Eiscue-ice", Pokemon.HIELO, Pokemon.NINGUNO, 1.4, 89.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(876, "Indeedee-male", Pokemon.PSIQUICO, Pokemon.NORMAL, 0.9, 28.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(877, "Morpeko-full-belly", Pokemon.ELECTRICO, Pokemon.SINIESTRO, 0.3, 3.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(878, "Cufant", Pokemon.ACERO, Pokemon.NINGUNO, 1.2, 100.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(879, "Copperajah", Pokemon.ACERO, Pokemon.NINGUNO, 3.0, 650.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(880, "Dracozolt", Pokemon.ELECTRICO, Pokemon.DRAGON, 1.8, 190.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(881, "Arctozolt", Pokemon.ELECTRICO, Pokemon.HIELO, 2.3, 150.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(882, "Dracovish", Pokemon.AGUA, Pokemon.DRAGON, 2.3, 215.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(883, "Arctovish", Pokemon.AGUA, Pokemon.HIELO, 2.0, 175.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(884, "Duraludon", Pokemon.ACERO, Pokemon.DRAGON, 1.8, 40.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(885, "Dreepy", Pokemon.DRAGON, Pokemon.FANTASMA, 0.5, 2.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(886, "Drakloak", Pokemon.DRAGON, Pokemon.FANTASMA, 1.4, 11.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(887, "Dragapult", Pokemon.DRAGON, Pokemon.FANTASMA, 3.0, 50.0, 3, Pokemon.GALAR));
+        pokedex.add(new Pokemon(888, "Zacian", Pokemon.HADA, Pokemon.NINGUNO, 2.8, 110.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(889, "Zamazenta", Pokemon.LUCHA, Pokemon.NINGUNO, 2.9, 210.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(890, "Eternatus", Pokemon.VENENO, Pokemon.DRAGON, 20.0, 950.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(891, "Kubfu", Pokemon.LUCHA, Pokemon.NINGUNO, 0.6, 12.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(892, "Urshifu-single-strike", Pokemon.LUCHA, Pokemon.SINIESTRO, 1.9, 105.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(893, "Zarude", Pokemon.SINIESTRO, Pokemon.PLANTA, 1.8, 70.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(894, "Regieleki", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.2, 145.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(895, "Regidrago", Pokemon.DRAGON, Pokemon.NINGUNO, 2.1, 200.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(896, "Glastrier", Pokemon.HIELO, Pokemon.NINGUNO, 2.2, 800.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(897, "Spectrier", Pokemon.FANTASMA, Pokemon.NINGUNO, 2.0, 44.5, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(898, "Calyrex", Pokemon.PSIQUICO, Pokemon.PLANTA, 1.1, 7.7, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(899, "Wyrdeer", Pokemon.NORMAL, Pokemon.PSIQUICO, 1.8, 95.1, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(900, "Kleavor", Pokemon.BICHO, Pokemon.ROCA, 1.8, 89.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(901, "Ursaluna", Pokemon.TIERRA, Pokemon.NORMAL, 2.4, 290.0, 3, Pokemon.GALAR));
+        pokedex.add(new Pokemon(902, "Basculegion-male", Pokemon.AGUA, Pokemon.FANTASMA, 3.0, 110.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(903, "Sneasler", Pokemon.LUCHA, Pokemon.VENENO, 1.3, 43.0, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(904, "Overqwil", Pokemon.SINIESTRO, Pokemon.VENENO, 2.5, 60.5, 2, Pokemon.GALAR));
+        pokedex.add(new Pokemon(905, "Enamorus-incarnate", Pokemon.HADA, Pokemon.VOLADOR, 1.6, 48.0, 1, Pokemon.GALAR));
+        pokedex.add(new Pokemon(906, "Sprigatito", Pokemon.PLANTA, Pokemon.NINGUNO, 0.4, 4.1, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(907, "Floragato", Pokemon.PLANTA, Pokemon.NINGUNO, 0.9, 12.2, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(908, "Meowscarada", Pokemon.PLANTA, Pokemon.SINIESTRO, 1.5, 31.2, 3, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(909, "Fuecoco", Pokemon.FUEGO, Pokemon.NINGUNO, 0.4, 9.8, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(910, "Crocalor", Pokemon.FUEGO, Pokemon.NINGUNO, 1.0, 30.7, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(911, "Skeledirge", Pokemon.FUEGO, Pokemon.FANTASMA, 1.6, 326.5, 3, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(912, "Quaxly", Pokemon.AGUA, Pokemon.NINGUNO, 0.5, 6.1, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(913, "Quaxwell", Pokemon.AGUA, Pokemon.NINGUNO, 1.2, 21.5, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(914, "Quaquaval", Pokemon.AGUA, Pokemon.LUCHA, 1.8, 61.9, 3, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(915, "Lechonk", Pokemon.NORMAL, Pokemon.NINGUNO, 0.5, 10.2, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(916, "Oinkologne-male", Pokemon.NORMAL, Pokemon.NINGUNO, 1.0, 120.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(917, "Tarountula", Pokemon.BICHO, Pokemon.NINGUNO, 0.3, 4.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(918, "Spidops", Pokemon.BICHO, Pokemon.NINGUNO, 1.0, 16.5, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(919, "Nymble", Pokemon.BICHO, Pokemon.NINGUNO, 0.2, 1.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(920, "Lokix", Pokemon.BICHO, Pokemon.SINIESTRO, 1.0, 17.5, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(921, "Pawmi", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.3, 2.5, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(922, "Pawmo", Pokemon.ELECTRICO, Pokemon.LUCHA, 0.4, 6.5, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(923, "Pawmot", Pokemon.ELECTRICO, Pokemon.LUCHA, 0.9, 41.0, 3, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(924, "Tandemaus", Pokemon.NORMAL, Pokemon.NINGUNO, 0.3, 1.8, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(925, "Maushold-family-of-four", Pokemon.NORMAL, Pokemon.NINGUNO, 0.3, 2.3, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(926, "Fidough", Pokemon.HADA, Pokemon.NINGUNO, 0.3, 10.9, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(927, "Dachsbun", Pokemon.HADA, Pokemon.NINGUNO, 0.5, 14.9, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(928, "Smoliv", Pokemon.PLANTA, Pokemon.NORMAL, 0.3, 6.5, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(929, "Dolliv", Pokemon.PLANTA, Pokemon.NORMAL, 0.6, 11.9, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(930, "Arboliva", Pokemon.PLANTA, Pokemon.NORMAL, 1.4, 48.2, 3, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(931, "Squawkabilly-green-plumage", Pokemon.NORMAL, Pokemon.VOLADOR, 0.6, 2.4, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(932, "Nacli", Pokemon.ROCA, Pokemon.NINGUNO, 0.4, 16.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(933, "Naclstack", Pokemon.ROCA, Pokemon.NINGUNO, 0.6, 105.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(934, "Garganacl", Pokemon.ROCA, Pokemon.NINGUNO, 2.3, 240.0, 3, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(935, "Charcadet", Pokemon.FUEGO, Pokemon.NINGUNO, 0.6, 10.5, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(936, "Armarouge", Pokemon.FUEGO, Pokemon.PSIQUICO, 1.5, 85.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(937, "Ceruledge", Pokemon.FUEGO, Pokemon.FANTASMA, 1.6, 62.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(938, "Tadbulb", Pokemon.ELECTRICO, Pokemon.NINGUNO, 0.3, 0.4, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(939, "Bellibolt", Pokemon.ELECTRICO, Pokemon.NINGUNO, 1.2, 113.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(940, "Wattrel", Pokemon.ELECTRICO, Pokemon.VOLADOR, 0.4, 3.6, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(941, "Kilowattrel", Pokemon.ELECTRICO, Pokemon.VOLADOR, 1.4, 38.6, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(942, "Maschiff", Pokemon.SINIESTRO, Pokemon.NINGUNO, 0.5, 16.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(943, "Mabosstiff", Pokemon.SINIESTRO, Pokemon.NINGUNO, 1.1, 61.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(944, "Shroodle", Pokemon.VENENO, Pokemon.NORMAL, 0.2, 0.7, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(945, "Grafaiai", Pokemon.VENENO, Pokemon.NORMAL, 0.7, 27.2, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(946, "Bramblin", Pokemon.PLANTA, Pokemon.FANTASMA, 0.6, 0.6, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(947, "Brambleghast", Pokemon.PLANTA, Pokemon.FANTASMA, 1.2, 6.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(948, "Toedscool", Pokemon.TIERRA, Pokemon.PLANTA, 0.9, 33.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(949, "Toedscruel", Pokemon.TIERRA, Pokemon.PLANTA, 1.9, 58.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(950, "Klawf", Pokemon.ROCA, Pokemon.NINGUNO, 1.3, 79.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(951, "Capsakid", Pokemon.PLANTA, Pokemon.NINGUNO, 0.3, 3.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(952, "Scovillain", Pokemon.PLANTA, Pokemon.FUEGO, 0.9, 15.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(953, "Rellor", Pokemon.BICHO, Pokemon.NINGUNO, 0.2, 1.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(954, "Rabsca", Pokemon.BICHO, Pokemon.PSIQUICO, 0.3, 3.5, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(955, "Flittle", Pokemon.PSIQUICO, Pokemon.NINGUNO, 0.2, 1.5, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(956, "Espathra", Pokemon.PSIQUICO, Pokemon.NINGUNO, 1.9, 90.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(957, "Tinkatink", Pokemon.HADA, Pokemon.ACERO, 0.4, 8.9, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(958, "Tinkatuff", Pokemon.HADA, Pokemon.ACERO, 0.7, 59.1, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(959, "Tinkaton", Pokemon.HADA, Pokemon.ACERO, 0.7, 112.8, 3, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(960, "Wiglett", Pokemon.AGUA, Pokemon.NINGUNO, 1.2, 1.8, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(961, "Wugtrio", Pokemon.AGUA, Pokemon.NINGUNO, 1.2, 5.4, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(962, "Bombirdier", Pokemon.VOLADOR, Pokemon.SINIESTRO, 1.5, 42.9, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(963, "Finizen", Pokemon.AGUA, Pokemon.NINGUNO, 1.3, 60.2, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(964, "Palafin-zero", Pokemon.AGUA, Pokemon.NINGUNO, 1.3, 60.2, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(965, "Varoom", Pokemon.ACERO, Pokemon.VENENO, 1.0, 35.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(966, "Revavroom", Pokemon.ACERO, Pokemon.VENENO, 1.8, 120.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(967, "Cyclizar", Pokemon.DRAGON, Pokemon.NORMAL, 1.6, 63.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(968, "Orthworm", Pokemon.ACERO, Pokemon.NINGUNO, 2.5, 310.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(969, "Glimmet", Pokemon.ROCA, Pokemon.VENENO, 0.7, 8.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(970, "Glimmora", Pokemon.ROCA, Pokemon.VENENO, 1.5, 45.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(971, "Greavard", Pokemon.FANTASMA, Pokemon.NINGUNO, 0.6, 35.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(972, "Houndstone", Pokemon.FANTASMA, Pokemon.NINGUNO, 2.0, 15.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(973, "Flamigo", Pokemon.VOLADOR, Pokemon.LUCHA, 1.6, 37.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(974, "Cetoddle", Pokemon.HIELO, Pokemon.NINGUNO, 1.2, 45.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(975, "Cetitan", Pokemon.HIELO, Pokemon.NINGUNO, 4.5, 700.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(976, "Veluza", Pokemon.AGUA, Pokemon.PSIQUICO, 2.5, 90.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(977, "Dondozo", Pokemon.AGUA, Pokemon.NINGUNO, 12.0, 220.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(978, "Tatsugiri-curly", Pokemon.DRAGON, Pokemon.AGUA, 0.3, 8.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(979, "Annihilape", Pokemon.LUCHA, Pokemon.FANTASMA, 1.2, 56.0, 3, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(980, "Clodsire", Pokemon.VENENO, Pokemon.TIERRA, 1.8, 223.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(981, "Farigiraf", Pokemon.NORMAL, Pokemon.PSIQUICO, 3.2, 160.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(982, "Dudunsparce-two-segment", Pokemon.NORMAL, Pokemon.NINGUNO, 3.6, 39.2, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(983, "Kingambit", Pokemon.SINIESTRO, Pokemon.ACERO, 2.0, 120.0, 3, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(984, "Great-tusk", Pokemon.TIERRA, Pokemon.LUCHA, 2.2, 320.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(985, "Scream-tail", Pokemon.HADA, Pokemon.PSIQUICO, 1.2, 8.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(986, "Brute-bonnet", Pokemon.PLANTA, Pokemon.SINIESTRO, 1.2, 21.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(987, "Flutter-mane", Pokemon.FANTASMA, Pokemon.HADA, 1.4, 4.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(988, "Slither-wing", Pokemon.BICHO, Pokemon.LUCHA, 3.2, 92.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(989, "Sandy-shocks", Pokemon.ELECTRICO, Pokemon.TIERRA, 2.3, 60.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(990, "Iron-treads", Pokemon.TIERRA, Pokemon.ACERO, 0.9, 240.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(991, "Iron-bundle", Pokemon.HIELO, Pokemon.AGUA, 0.6, 11.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(992, "Iron-hands", Pokemon.LUCHA, Pokemon.ELECTRICO, 1.8, 380.7, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(993, "Iron-jugulis", Pokemon.SINIESTRO, Pokemon.VOLADOR, 1.3, 111.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(994, "Iron-moth", Pokemon.FUEGO, Pokemon.VENENO, 1.2, 36.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(995, "Iron-thorns", Pokemon.ROCA, Pokemon.ELECTRICO, 1.6, 303.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(996, "Frigibax", Pokemon.DRAGON, Pokemon.HIELO, 0.5, 17.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(997, "Arctibax", Pokemon.DRAGON, Pokemon.HIELO, 0.8, 30.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(998, "Baxcalibur", Pokemon.DRAGON, Pokemon.HIELO, 2.1, 210.0, 3, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(999, "Gimmighoul", Pokemon.FANTASMA, Pokemon.NINGUNO, 0.3, 5.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1000, "Gholdengo", Pokemon.ACERO, Pokemon.FANTASMA, 1.2, 30.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1001, "Wo-chien", Pokemon.SINIESTRO, Pokemon.PLANTA, 1.5, 74.2, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1002, "Chien-pao", Pokemon.SINIESTRO, Pokemon.HIELO, 1.9, 152.2, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1003, "Ting-lu", Pokemon.SINIESTRO, Pokemon.TIERRA, 2.7, 699.7, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1004, "Chi-yu", Pokemon.SINIESTRO, Pokemon.FUEGO, 0.4, 4.9, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1005, "Roaring-moon", Pokemon.DRAGON, Pokemon.SINIESTRO, 2.0, 380.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1006, "Iron-valiant", Pokemon.HADA, Pokemon.LUCHA, 1.4, 35.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1007, "Koraidon", Pokemon.LUCHA, Pokemon.DRAGON, 2.5, 303.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1008, "Miraidon", Pokemon.ELECTRICO, Pokemon.DRAGON, 3.5, 240.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1009, "Walking-wake", Pokemon.AGUA, Pokemon.DRAGON, 3.5, 280.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1010, "Iron-leaves", Pokemon.PLANTA, Pokemon.PSIQUICO, 1.5, 125.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1011, "Dipplin", Pokemon.PLANTA, Pokemon.DRAGON, 0.4, 9.7, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1012, "Poltchageist", Pokemon.PLANTA, Pokemon.FANTASMA, 0.1, 1.1, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1013, "Sinistcha", Pokemon.PLANTA, Pokemon.FANTASMA, 0.2, 2.2, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1014, "Okidogi", Pokemon.VENENO, Pokemon.LUCHA, 1.8, 92.2, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1015, "Munkidori", Pokemon.VENENO, Pokemon.PSIQUICO, 1.0, 12.2, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1016, "Fezandipiti", Pokemon.VENENO, Pokemon.HADA, 1.4, 30.1, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1017, "Ogerpon", Pokemon.PLANTA, Pokemon.NINGUNO, 1.2, 39.8, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1018, "Archaludon", Pokemon.ACERO, Pokemon.DRAGON, 2.0, 60.0, 2, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1019, "Hydrapple", Pokemon.PLANTA, Pokemon.DRAGON, 1.8, 93.0, 3, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1020, "Gouging-fire", Pokemon.FUEGO, Pokemon.DRAGON, 3.5, 590.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1021, "Raging-bolt", Pokemon.ELECTRICO, Pokemon.DRAGON, 5.2, 480.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1022, "Iron-boulder", Pokemon.ROCA, Pokemon.PSIQUICO, 1.5, 162.5, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1023, "Iron-crown", Pokemon.ACERO, Pokemon.PSIQUICO, 1.6, 156.0, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1024, "Terapagos", Pokemon.NORMAL, Pokemon.NINGUNO, 0.2, 6.5, 1, Pokemon.PALDEA));
+        pokedex.add(new Pokemon(1025, "Pecharunt", Pokemon.VENENO, Pokemon.FANTASMA, 0.3, 0.3, 1, Pokemon.PALDEA));
+    }
+
+    public void cargarPokemon(){
+        //Limpiamos posibles datos previos
+        pokedexEnUso.clear();
+        pokemonMencionados.clear();
+        pokemonComparados.clear();
+        intento =0;
+        rv.setAdapter(null);
+        int inicio = 0;
+        int fin = 0;
+        boolean fullDex = false;
+        //Limitamos la lista según región
+        switch (region) {
+            case 1:
+                inicio = 0;
+                fin = 150;
+                break;
+            case 2: // Johto
+                inicio = 151;
+                fin = 250;
+                break;
+            case 3: // Hoenn
+                inicio = 251;
+                fin = 385;
+                break;
+            case 4: // Sinnoh
+                inicio = 386;
+                fin = 492;
+                break;
+            case 5: // Teselia / Unova
+                inicio = 493;
+                fin = 648;
+                break;
+            case 6: // Kalos
+                inicio = 649;
+                fin = 720;
+                break;
+            case 7: // Alola
+                inicio = 721;
+                fin = 808;
+                break;
+            case 8: // Galar + Hisui
+                inicio = 809;
+                fin = 904;
+                break;
+            case 9: // Paldea
+                inicio = 905;
+                fin = 1024;
+                break;
+            case 0:
+                fullDex = true;
+        }
+        if (!fullDex){
+            for (int i = inicio ; i <= fin ; i++){
+                pokedexEnUso.add(pokedex.get(i));
+            }
+        }
+        else {
+            pokedexEnUso.addAll(pokedex);
+        }
+        pkmnElegido = pokedexEnUso.get((int)(Math.random()*pokedexEnUso.size()));
+        System.out.println(pkmnElegido);
+    }
+
+    public boolean comparar(Pokemon pkmn){
+        int[] resultadosComparacion = new int[7];
+        //if (!pokemonMencionados.contains(pkmn.getNumero())){
+        intento++;
+        pokemonMencionados.add(pkmn.getNumero());
+        if (pkmn.getNumero() == pkmnElegido.getNumero()){
+            resultadosComparacion[0] = 1;
+        }
+        else {
+            resultadosComparacion[0] = -1;
+        }
+        //t1
+        if (pkmn.getTipo1()==pkmnElegido.getTipo1()){
+            resultadosComparacion[1] = 1;
+        }
+        else {
+            if (pkmn.getTipo1()==pkmnElegido.getTipo2()){
+                resultadosComparacion[1] = -1;
+            }
+            else {
+                resultadosComparacion[1] = -2;
+            }
+        }
+        if (pkmn.getTipo2()==pkmnElegido.getTipo2()){
+            resultadosComparacion[2] = 1;
+        }
+        else {
+            if (pkmn.getTipo2()==pkmnElegido.getTipo1()){
+                resultadosComparacion[2] = -1;
+            }
+            else {
+                resultadosComparacion[2] = -2;
+
+            }
+        }
+        //Altura
+        if (pkmn.getAltura()==pkmnElegido.getAltura()){
+            resultadosComparacion[3] = 1;
+        }
+        else {
+            if (pkmn.getAltura()>pkmnElegido.getAltura()){
+                resultadosComparacion[3] = -1;
+            }
+            else {
+                resultadosComparacion[3] = -1;
+            }
+        }
+        //PESO
+        if (pkmn.getPeso()==pkmnElegido.getPeso()){
+            resultadosComparacion[4] = 1;
+        }
+        else {
+            if (pkmn.getPeso()>pkmnElegido.getPeso()){
+                resultadosComparacion[4] = -1;
+            }
+            else {
+                resultadosComparacion[4] = -2;
+            }
+        }
+        //ETAPA EVOLUTIVA
+        if (pkmn.getEtapaEvolutiva()==pkmnElegido.getEtapaEvolutiva()){
+            resultadosComparacion[5] = 1;
+        }
+        else {
+            resultadosComparacion[5] = -1;
+        }
+        //REGION
+        if (pkmn.getRegion()==pkmnElegido.getRegion()){
+            resultadosComparacion[6] = 1;
+        }
+        else {
+            resultadosComparacion[6] = -1;
+        }
+        pkmn.setComparacion(resultadosComparacion);
+        pokemonComparados.add(pkmn);
+        ArrayList<Pokemon> datosRv = (ArrayList<Pokemon>)pokemonComparados.clone();
+        Collections.reverse(datosRv);
+        pokemonAdapter pkmnAdapter = new pokemonAdapter(datosRv,context);
+        rv.setLayoutManager(new LinearLayoutManager(context));
+        rv.setAdapter(pkmnAdapter);
+        if (Arrays.stream(resultadosComparacion).sum()==7){
+            return true;
+        }
+        return false;
+
+    }
+
+    //Obtiene los nombres de los pokemons a mostrar en el AutoCompleteTextView
+    public String[] getNombresPkmn(){
+        String[] resultados = new String[pokedexEnUso.size()];
+        for (int i = 0 ; i < pokedexEnUso.size() ; i++){
+            resultados[i] = pokedexEnUso.get(i).getNombre();
+        }
+        return resultados;
+    }
+
+    public int getRegion() {
+        return region;
+    }
+
+    public void setRegion(int region) {
+        this.region = region;
+    }
+
+    public Pokemon getPkmnElegido() {
+        return pkmnElegido;
+    }
+
+    public void setPkmnElegido(Pokemon pkmnElegido) {
+        this.pkmnElegido = pkmnElegido;
+    }
+
+    public ArrayList<Pokemon> getPokedex() {
+        return pokedex;
+    }
+
+    public ArrayList<Pokemon> getPokedexEnUso() {
+        return pokedexEnUso;
+    }
+
+    public int getIntento() {
+        return intento;
+    }
+}

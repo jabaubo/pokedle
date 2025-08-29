@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gameMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btResetGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="Reiniciar"
+        app:cornerRadius="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/actvGame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/actvGame" />
+
+
+    <Button
+        android:id="@+id/btAyuda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ayuda"
+        app:cornerRadius="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btResetGame" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/gameRv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/btAyuda"
+        app:layout_constraintEnd_toEndOf="@+id/btResetGame"
+        app:layout_constraintStart_toStartOf="@+id/actvGame"
+        app:layout_constraintTop_toBottomOf="@+id/btResetGame"
+        tools:itemCount="3"
+        tools:listitem="@layout/pokemon_layout_placeholder" />
+
+    <AutoCompleteTextView
+        android:id="@+id/actvGame"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_margin="8dp"
+        android:singleLine="true"
+        app:layout_constraintEnd_toStartOf="@+id/btResetGame"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/tvIntentos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btAyuda"
+        app:layout_constraintEnd_toEndOf="@+id/gameRv"
+        app:layout_constraintStart_toStartOf="@+id/gameRv"
+        app:layout_constraintTop_toTopOf="@+id/btAyuda" />
+</androidx.constraintlayout.widget.ConstraintLayout>

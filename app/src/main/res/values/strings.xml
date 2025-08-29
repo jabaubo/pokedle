@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Pokedle</string>
+    <string name="si">Sí</string>
+    <string name="no">No</string>
+    <string name="reset">Reset</string>
+    <string name="ayuda">Ayuda</string>
+    <string name="ok">ok</string>
+</resources>

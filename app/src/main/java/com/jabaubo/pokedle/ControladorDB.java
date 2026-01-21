@@ -1073,7 +1073,6 @@ public class ControladorDB extends SQLiteOpenHelper {
                 COLUMN_STAGE + " INT, " +
                 COLUMN_REGION + " INT);";
         db.execSQL(query);
-
     }
 
     @Override

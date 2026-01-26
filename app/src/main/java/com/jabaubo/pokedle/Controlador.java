@@ -15,17 +15,228 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Random;
 
 public class Controlador {
+    public final int MODO_NORMAL = 1;
+    public final int MODO_DAILY = 2;
+    public final int MODO_PVP = 3;
+
     private ArrayList<Pokemon> pokedex = new ArrayList<>();
     private ArrayList<Pokemon> pokedexEnUso = new ArrayList<>();
     private ArrayList<Integer> pokemonMencionados = new ArrayList<>();
     private ArrayList<Pokemon> pokemonComparados = new ArrayList<>();
+
     private int intento = 0;
-    private RecyclerView rv ;
+    private RecyclerView rv;
     private Context context;
     private int region = 0;
+    private boolean pvp = false;
     private Pokemon pkmnElegido;
+
+    private Random generator;
+
+    public void cargarPokemon() {
+        //Limpiamos posibles datos previos
+        pokedexEnUso.clear();
+        pokemonMencionados.clear();
+        pokemonComparados.clear();
+        intento = 0;
+        rv.setAdapter(null);
+        int inicio = 0;
+        int fin = 0;
+        boolean fullDex = false;
+        //Limitamos la lista según región
+        switch (region) {
+            case 1:
+                inicio = 0;
+                fin = 150;
+                break;
+            case 2: // Johto
+                inicio = 151;
+                fin = 250;
+                break;
+            case 3: // Hoenn
+                inicio = 251;
+                fin = 385;
+                break;
+            case 4: // Sinnoh
+                inicio = 386;
+                fin = 492;
+                break;
+            case 5: // Teselia / Unova
+                inicio = 493;
+                fin = 648;
+                break;
+            case 6: // Kalos
+                inicio = 649;
+                fin = 720;
+                break;
+            case 7: // Alola
+                inicio = 721;
+                fin = 808;
+                break;
+            case 8: // Galar + Hisui
+                inicio = 809;
+                fin = 904;
+                break;
+            case 9: // Paldea
+                inicio = 905;
+                fin = 1024;
+                break;
+            case 0:
+                fullDex = true;
+        }
+        if (!fullDex) {
+            for (int i = inicio; i <= fin; i++) {
+                pokedexEnUso.add(pokedex.get(i));
+            }
+        } else {
+            pokedexEnUso.addAll(pokedex);
+        }
+        pkmnElegido = pokedexEnUso.get((int) (Math.random() * pokedexEnUso.size()));
+
+
+    }
+
+    public void cargarPokemonConSeed() {
+        pokedexEnUso.addAll(pokedex);
+        pokemonMencionados.clear();
+        pokemonComparados.clear();
+        intento = 0;
+        rv.setAdapter(null);
+
+        int nPokemon = generator.nextInt(1024);
+        pkmnElegido = pokedexEnUso.get(nPokemon);
+
+    }
+
+    public void cargarPokemonConIndex(int indexPokemon) {
+        //Limpiamos posibles datos previos
+        pokedexEnUso.addAll(pokedex);
+        pokemonMencionados.clear();
+        pokemonComparados.clear();
+        intento = 0;
+        rv.setAdapter(null);
+        System.out.println(pkmnElegido);
+    }
+
+    public boolean comparar(Pokemon pkmn) {
+        int[] resultadosComparacion = new int[7];
+        //if (!pokemonMencionados.contains(pkmn.getNumero())){
+        intento++;
+        pokemonMencionados.add(pkmn.getNumero());
+        if (pkmn.getNumero() == pkmnElegido.getNumero()) {
+            resultadosComparacion[0] = 1;
+        } else {
+            resultadosComparacion[0] = -1;
+        }
+        //t1
+        if (pkmn.getTipo1() == pkmnElegido.getTipo1()) {
+            resultadosComparacion[1] = 1;
+        } else {
+            if (pkmn.getTipo1() == pkmnElegido.getTipo2()) {
+                resultadosComparacion[1] = -1;
+            } else {
+                resultadosComparacion[1] = -2;
+            }
+        }
+        if (pkmn.getTipo2() == pkmnElegido.getTipo2()) {
+            resultadosComparacion[2] = 1;
+        } else {
+            if (pkmn.getTipo2() == pkmnElegido.getTipo1()) {
+                resultadosComparacion[2] = -1;
+            } else {
+                resultadosComparacion[2] = -2;
+
+            }
+        }
+        //Altura
+        if (pkmn.getAltura() == pkmnElegido.getAltura()) {
+            resultadosComparacion[3] = 1;
+        } else {
+            if (pkmn.getAltura() > pkmnElegido.getAltura()) {
+                resultadosComparacion[3] = -1;
+            } else {
+                resultadosComparacion[3] = -1;
+            }
+        }
+        //PESO
+        if (pkmn.getPeso() == pkmnElegido.getPeso()) {
+            resultadosComparacion[4] = 1;
+        } else {
+            if (pkmn.getPeso() > pkmnElegido.getPeso()) {
+                resultadosComparacion[4] = -1;
+            } else {
+                resultadosComparacion[4] = -2;
+            }
+        }
+        //ETAPA EVOLUTIVA
+        if (pkmn.getEtapaEvolutiva() == pkmnElegido.getEtapaEvolutiva()) {
+            resultadosComparacion[5] = 1;
+        } else {
+            resultadosComparacion[5] = -1;
+        }
+        //REGION
+        if (pkmn.getRegion() == pkmnElegido.getRegion()) {
+            resultadosComparacion[6] = 1;
+        } else {
+            resultadosComparacion[6] = -1;
+        }
+        pkmn.setComparacion(resultadosComparacion);
+        pokemonComparados.add(pkmn);
+        ArrayList<Pokemon> datosRv = (ArrayList<Pokemon>) pokemonComparados.clone();
+        Collections.reverse(datosRv);
+        pokemonAdapter pkmnAdapter = new pokemonAdapter(datosRv, context);
+        rv.setLayoutManager(new LinearLayoutManager(context));
+        rv.setAdapter(pkmnAdapter);
+        if (Arrays.stream(resultadosComparacion).sum() == 7) {
+            return true;
+        }
+        return false;
+
+    }
+
+    //Obtiene los nombres de los pokemons a mostrar en el AutoCompleteTextView
+    public String[] getNombresPkmn() {
+        String[] resultados = new String[pokedexEnUso.size()];
+        for (int i = 0; i < pokedexEnUso.size(); i++) {
+            resultados[i] = pokedexEnUso.get(i).getNombre();
+        }
+        return resultados;
+    }
+
+    public int getRegion() {
+        return region;
+    }
+
+    public void setRegion(int region) {
+        this.region = region;
+    }
+
+    public Pokemon getPkmnElegido() {
+        return pkmnElegido;
+    }
+
+    public void setPkmnElegido(Pokemon pkmnElegido) {
+        this.pkmnElegido = pkmnElegido;
+    }
+
+    public ArrayList<Pokemon> getPokedex() {
+        return pokedex;
+    }
+
+    public ArrayList<Pokemon> getPokedexEnUso() {
+        return pokedexEnUso;
+    }
+
+    public int getIntento() {
+        return intento;
+    }
+
+    public void setRandomSeed(int randomSeed) {
+        generator = new Random(randomSeed);
+    }
 
     public Controlador(RecyclerView rv, Context context) {
         this.rv = rv;
@@ -1055,192 +1266,5 @@ public class Controlador {
         pokedex.add(new Pokemon(1023, "Iron-crown", Pokemon.ACERO, Pokemon.PSIQUICO, 1.6, 156.0, 1, Pokemon.PALDEA));
         pokedex.add(new Pokemon(1024, "Terapagos", Pokemon.NORMAL, Pokemon.NINGUNO, 0.2, 6.5, 1, Pokemon.PALDEA));
         pokedex.add(new Pokemon(1025, "Pecharunt", Pokemon.VENENO, Pokemon.FANTASMA, 0.3, 0.3, 1, Pokemon.PALDEA));
-    }
-
-    public void cargarPokemon(){
-        //Limpiamos posibles datos previos
-        pokedexEnUso.clear();
-        pokemonMencionados.clear();
-        pokemonComparados.clear();
-        intento =0;
-        rv.setAdapter(null);
-        int inicio = 0;
-        int fin = 0;
-        boolean fullDex = false;
-        //Limitamos la lista según región
-        switch (region) {
-            case 1:
-                inicio = 0;
-                fin = 150;
-                break;
-            case 2: // Johto
-                inicio = 151;
-                fin = 250;
-                break;
-            case 3: // Hoenn
-                inicio = 251;
-                fin = 385;
-                break;
-            case 4: // Sinnoh
-                inicio = 386;
-                fin = 492;
-                break;
-            case 5: // Teselia / Unova
-                inicio = 493;
-                fin = 648;
-                break;
-            case 6: // Kalos
-                inicio = 649;
-                fin = 720;
-                break;
-            case 7: // Alola
-                inicio = 721;
-                fin = 808;
-                break;
-            case 8: // Galar + Hisui
-                inicio = 809;
-                fin = 904;
-                break;
-            case 9: // Paldea
-                inicio = 905;
-                fin = 1024;
-                break;
-            case 0:
-                fullDex = true;
-        }
-        if (!fullDex){
-            for (int i = inicio ; i <= fin ; i++){
-                pokedexEnUso.add(pokedex.get(i));
-            }
-        }
-        else {
-            pokedexEnUso.addAll(pokedex);
-        }
-        pkmnElegido = pokedexEnUso.get((int)(Math.random()*pokedexEnUso.size()));
-        System.out.println(pkmnElegido);
-    }
-
-    public boolean comparar(Pokemon pkmn){
-        int[] resultadosComparacion = new int[7];
-        //if (!pokemonMencionados.contains(pkmn.getNumero())){
-        intento++;
-        pokemonMencionados.add(pkmn.getNumero());
-        if (pkmn.getNumero() == pkmnElegido.getNumero()){
-            resultadosComparacion[0] = 1;
-        }
-        else {
-            resultadosComparacion[0] = -1;
-        }
-        //t1
-        if (pkmn.getTipo1()==pkmnElegido.getTipo1()){
-            resultadosComparacion[1] = 1;
-        }
-        else {
-            if (pkmn.getTipo1()==pkmnElegido.getTipo2()){
-                resultadosComparacion[1] = -1;
-            }
-            else {
-                resultadosComparacion[1] = -2;
-            }
-        }
-        if (pkmn.getTipo2()==pkmnElegido.getTipo2()){
-            resultadosComparacion[2] = 1;
-        }
-        else {
-            if (pkmn.getTipo2()==pkmnElegido.getTipo1()){
-                resultadosComparacion[2] = -1;
-            }
-            else {
-                resultadosComparacion[2] = -2;
-
-            }
-        }
-        //Altura
-        if (pkmn.getAltura()==pkmnElegido.getAltura()){
-            resultadosComparacion[3] = 1;
-        }
-        else {
-            if (pkmn.getAltura()>pkmnElegido.getAltura()){
-                resultadosComparacion[3] = -1;
-            }
-            else {
-                resultadosComparacion[3] = -1;
-            }
-        }
-        //PESO
-        if (pkmn.getPeso()==pkmnElegido.getPeso()){
-            resultadosComparacion[4] = 1;
-        }
-        else {
-            if (pkmn.getPeso()>pkmnElegido.getPeso()){
-                resultadosComparacion[4] = -1;
-            }
-            else {
-                resultadosComparacion[4] = -2;
-            }
-        }
-        //ETAPA EVOLUTIVA
-        if (pkmn.getEtapaEvolutiva()==pkmnElegido.getEtapaEvolutiva()){
-            resultadosComparacion[5] = 1;
-        }
-        else {
-            resultadosComparacion[5] = -1;
-        }
-        //REGION
-        if (pkmn.getRegion()==pkmnElegido.getRegion()){
-            resultadosComparacion[6] = 1;
-        }
-        else {
-            resultadosComparacion[6] = -1;
-        }
-        pkmn.setComparacion(resultadosComparacion);
-        pokemonComparados.add(pkmn);
-        ArrayList<Pokemon> datosRv = (ArrayList<Pokemon>)pokemonComparados.clone();
-        Collections.reverse(datosRv);
-        pokemonAdapter pkmnAdapter = new pokemonAdapter(datosRv,context);
-        rv.setLayoutManager(new LinearLayoutManager(context));
-        rv.setAdapter(pkmnAdapter);
-        if (Arrays.stream(resultadosComparacion).sum()==7){
-            return true;
-        }
-        return false;
-
-    }
-
-    //Obtiene los nombres de los pokemons a mostrar en el AutoCompleteTextView
-    public String[] getNombresPkmn(){
-        String[] resultados = new String[pokedexEnUso.size()];
-        for (int i = 0 ; i < pokedexEnUso.size() ; i++){
-            resultados[i] = pokedexEnUso.get(i).getNombre();
-        }
-        return resultados;
-    }
-
-    public int getRegion() {
-        return region;
-    }
-
-    public void setRegion(int region) {
-        this.region = region;
-    }
-
-    public Pokemon getPkmnElegido() {
-        return pkmnElegido;
-    }
-
-    public void setPkmnElegido(Pokemon pkmnElegido) {
-        this.pkmnElegido = pkmnElegido;
-    }
-
-    public ArrayList<Pokemon> getPokedex() {
-        return pokedex;
-    }
-
-    public ArrayList<Pokemon> getPokedexEnUso() {
-        return pokedexEnUso;
-    }
-
-    public int getIntento() {
-        return intento;
     }
 }

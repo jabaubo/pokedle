@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class menuButtonAdapter extends RecyclerView.Adapter<menuButtonAdapter.MyViewHolder> {
     private static MainActivity mainActivity;
+
     public menuButtonAdapter(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
     }
@@ -27,7 +28,7 @@ public class menuButtonAdapter extends RecyclerView.Adapter<menuButtonAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 holder.region.setText("Kanto");
                 holder.imagen1.setImageDrawable(mainActivity.getDrawable(R.drawable.mewtwo));
@@ -90,21 +91,35 @@ public class menuButtonAdapter extends RecyclerView.Adapter<menuButtonAdapter.My
                 holder.imagen1.setImageDrawable(mainActivity.getDrawable(R.drawable.bulbasaur));
                 holder.imagen2.setImageDrawable(mainActivity.getDrawable(R.drawable.pecharunt));
                 holder.constraintLayout.setBackgroundResource(R.drawable.degradado_full);
-
+                break;
+            case 10:
+                holder.region.setText("PVP");
+                holder.imagen1.setImageDrawable(mainActivity.getDrawable(R.drawable.bulbasaur));
+                holder.imagen2.setImageDrawable(mainActivity.getDrawable(R.drawable.pecharunt));
+                holder.constraintLayout.setBackgroundResource(R.drawable.degradado_full);
                 break;
         }
 
         holder.menuView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mainActivity.getBaseContext(),GameActivity.class);
+                Intent intent = new Intent(mainActivity.getBaseContext(), GameActivity.class);
                 Bundle valores = new Bundle();
-                if (holder.getAdapterPosition()==9){
-                    valores.putInt("region",0);
+                switch (holder.getAdapterPosition()) {
+                    case 9:
+                        valores.putInt("region", 0);
+                        valores.putInt("pvp", 0);
+                        break;
+                    case 10:
+                        valores.putInt("region", 0);
+                        valores.putInt("pvp", 1);
+                        break;
+                    default:
+                        valores.putInt("pvp", 0);
+                        valores.putInt("region", (holder.getAdapterPosition() + 1));
+                        break;
                 }
-                else {
-                    valores.putInt("region",(holder.getAdapterPosition()+1));
-                }
+                valores.putString("modo","NORMAL");
                 intent.putExtras(valores);
                 mainActivity.actividadJuego(intent);
             }
@@ -113,7 +128,7 @@ public class menuButtonAdapter extends RecyclerView.Adapter<menuButtonAdapter.My
 
     @Override
     public int getItemCount() {
-        return 10;
+        return 11;
     }
 
 
@@ -123,6 +138,7 @@ public class menuButtonAdapter extends RecyclerView.Adapter<menuButtonAdapter.My
         ImageView imagen2;
         CardView menuView;
         ConstraintLayout constraintLayout;
+
         MyViewHolder(View itemView) {
             super(itemView);
             //Los cargamos

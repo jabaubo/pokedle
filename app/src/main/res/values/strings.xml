@@ -5,4 +5,8 @@
     <string name="reset">Reset</string>
     <string name="ayuda">Ayuda</string>
     <string name="ok">ok</string>
+
+    <string name="generar_clave">Generar clave</string>
+    <string name="usar_clave">Usar clave</string>
+    <string name="clave">Clave</string>
 </resources>

@@ -28,6 +28,7 @@ public class GameActivity extends AppCompatActivity {
     private TextView tvIntentos;
     private AutoCompleteTextView autoCompleteTextView;
     private Controlador controlador;
+    private int valorModo = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,109 +40,160 @@ public class GameActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         rv=findViewById(R.id.gameRv);
         btReset = findViewById(R.id.btResetGame);
         autoCompleteTextView = findViewById(R.id.actvGame);
         tvIntentos = findViewById(R.id.tvIntentos);
         btAyuda = findViewById(R.id.btAyuda);
         controlador = new Controlador(rv,this);
-        controlador.setRegion(getIntent().getExtras().getInt("region"));
-        controlador.cargarPokemon();
+        Bundle valores = getIntent().getExtras();
+
+        String modoStr = valores.getString("modo");
+        switch (modoStr){
+            case "NORMAL":
+                valorModo = controlador.MODO_NORMAL;
+                controlador.setRegion(valores.getInt("region"));
+                controlador.cargarPokemon();
+                break;
+            case "DAILY":
+                valorModo = controlador.MODO_DAILY;
+                controlador.setRandomSeed(valores.getInt("seed"));
+                controlador.cargarPokemonConSeed();
+                btReset.setEnabled(false);
+                break;
+            case "PVP":
+                valorModo = controlador.MODO_PVP;
+                controlador.setRandomSeed(valores.getInt("seed"));
+                controlador.cargarPokemonConSeed();
+                break;
+        }
+        System.out.println(controlador.getPkmnElegido());
         autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1,controlador.getNombresPkmn()));
         autoCompleteTextView.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER & event.getAction()==KeyEvent.ACTION_DOWN){
-                    autoCompleteTextView.setAdapter(null);
-                    String nombre = String.valueOf(autoCompleteTextView.getText());
-                    ArrayList<Pokemon> lista = controlador.getPokedexEnUso();
-                    final boolean[] existe = {false};
-                    for (int i = 0 ; i < lista.size();i++){
-                        if (nombre.equalsIgnoreCase(lista.get(i).getNombre())){
-                            existe[0] = true;
-                            boolean resultado = controlador.comparar(lista.get(i));
-                            tvIntentos.setText("Intentos: "+controlador.getIntento());
-                            lista.remove(i);
-                            autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1,controlador.getNombresPkmn()));
-                            if(resultado){
-                                AlertDialog alertDialog = new AlertDialog.Builder(GameActivity.this)
-                                        .setTitle("Has acertado en " + controlador.getIntento() + " intento(s)")
-                                        .setMessage("¿Quieres reiniciar el juego?")
-                                        .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                controlador.cargarPokemon();
-                                                autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1,controlador.getNombresPkmn()));
-                                                tvIntentos.setText("Intentos: "+controlador.getIntento());
-
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                existe[0] = false;
-                                            }
-                                        }).create();
-                                alertDialog.show();
-                            }
-                        }
-                    }
-                    autoCompleteTextView.setText("");
-                    if (!existe[0]){
-                        AlertDialog alertDialog = new AlertDialog.Builder(GameActivity.this)
-                                .setTitle("Error")
-                                .setMessage("El pokemon no existe o ha sido mencionado ya")
-                                .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
-                                       @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                    }
-                                }).create();
-                        alertDialog.show();
-                    }
-                }
-                return false;            }
+                return escribirAutocompletar(v,keyCode,event);
+            }
         });
 
         btReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog alertDialog = new AlertDialog.Builder(GameActivity.this)
-                        .setTitle("Advertencia")
-                        .setMessage("¿Quieres reiniciar el juego?")
-                        .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                controlador.cargarPokemon();
-                                autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1,controlador.getNombresPkmn()));
-                                tvIntentos.setText("Intentos: "+controlador.getIntento());
-
-                            }
-                        })
-                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert).create();
-                alertDialog.show();
+                clickReset();
             }
         });
         btAyuda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog alertDialog = new AlertDialog.Builder(GameActivity.this)
-                        .setTitle("Ayuda")
-                        .setMessage("Los colores de los campos indican lo siguiente:\nVerde - correcto\nNaranja - Tipo correcto , posición incorrecta(Ninguno como tipo secundario indica que el " +
-                                "Pokémon es monotipo)" +
-                                "\nRojo - " +
-                                "Incorrecto\n\nLos" +
-                                " indicadores en peso y " +
-                                "altura indican lo siguiente:\n> El Pokémon a adivinar mide o pesa más que este Pokémon\n< El Pokémon a adivinar mide o pesa menos que este Pokémon ")
-                        .setPositiveButton(R.string.ok, null).create();
-                alertDialog.show();
+                clickAyuda();
             }
         });
         tvIntentos.setText("Intentos: "+controlador.getIntento());
 
+    }
+
+    public boolean escribirAutocompletar(View v, int keyCode, KeyEvent event){
+
+        if (keyCode == KeyEvent.KEYCODE_ENTER & event.getAction()==KeyEvent.ACTION_DOWN){
+            autoCompleteTextView.setAdapter(null);
+            String nombre = String.valueOf(autoCompleteTextView.getText());
+            ArrayList<Pokemon> lista = controlador.getPokedexEnUso();
+            final boolean[] existe = {false};
+            for (int i = 0 ; i < lista.size();i++){
+                if (nombre.equalsIgnoreCase(lista.get(i).getNombre())){
+                    existe[0] = true;
+                    boolean resultado = controlador.comparar(lista.get(i));
+                    tvIntentos.setText("Intentos: "+controlador.getIntento());
+                    lista.remove(i);
+                    autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1,controlador.getNombresPkmn()));
+                    if(resultado){
+                        AlertDialog alertDialog = new AlertDialog.Builder(GameActivity.this)
+                                .setTitle("Has acertado en " + controlador.getIntento() + " intento(s)")
+                                .setMessage("¿Quieres reiniciar el juego?")
+                                .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (valorModo){
+                                            case 1:
+                                                controlador.cargarPokemon();
+                                                break;
+                                            case 3 :
+                                                controlador.cargarPokemonConSeed();
+                                                break;
+                                        }
+                                        System.out.println(controlador.getPkmnElegido());
+                                        autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1,controlador.getNombresPkmn()));
+                                        tvIntentos.setText("Intentos: "+controlador.getIntento());
+
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        existe[0] = false;
+                                    }
+                                }).create();
+                        alertDialog.show();
+                    }
+                }
+            }
+            autoCompleteTextView.setText("");
+            if (!existe[0]){
+                AlertDialog alertDialog = new AlertDialog.Builder(GameActivity.this)
+                        .setTitle("Error")
+                        .setMessage("El pokemon no existe o ha sido mencionado ya")
+                        .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }).create();
+                alertDialog.show();
+            }
+        }
+        return false;
+    }
+
+    public void clickReset(){
+        AlertDialog alertDialog = new AlertDialog.Builder(GameActivity.this)
+                .setTitle("Advertencia")
+                .setMessage("¿Quieres reiniciar el juego?")
+                .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (valorModo){
+                            case 1:
+                                controlador.cargarPokemon();
+                                break;
+                            case 3 :
+                                controlador.cargarPokemonConSeed();
+                                break;
+                        }
+                        System.out.println(controlador.getPkmnElegido());
+                        autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1,controlador.getNombresPkmn()));
+                        tvIntentos.setText("Intentos: "+controlador.getIntento());
+
+
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert).create();
+        alertDialog.show();
+    }
+    public void clickAyuda(){
+        AlertDialog alertDialog = new AlertDialog.Builder(GameActivity.this)
+                .setTitle("Ayuda")
+                .setMessage("Los colores de los campos indican lo siguiente:\nVerde - correcto\nNaranja - Tipo correcto , posición incorrecta(Ninguno como tipo secundario indica que el " +
+                        "Pokémon es monotipo)" +
+                        "\nRojo - " +
+                        "Incorrecto\n\nLos" +
+                        " indicadores en peso y " +
+                        "altura indican lo siguiente:\n> El Pokémon a adivinar mide o pesa más que este Pokémon\n< El Pokémon a adivinar mide o pesa menos que este Pokémon ")
+                .setPositiveButton(R.string.ok, null).create();
+        alertDialog.show();
     }
 }

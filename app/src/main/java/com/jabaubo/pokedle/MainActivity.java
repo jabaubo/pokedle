@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
 
+
     }
 
     public void actividadJuego(Intent intent){

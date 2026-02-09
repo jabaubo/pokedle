@@ -5,19 +5,21 @@
  *
  * Funcionalidad : Funciones para la carga de los Objetos Pokemon , la comparación de ellos y la selección   */
 
-package com.jabaubo.pokedle;
+package com.jabaubo.pokedle.objects;
 
 import android.content.Context;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jabaubo.pokedle.ControladorDB;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
-public class Controlador {
+public class ControladorJuego {
     public final int MODO_NORMAL = 1;
     public final int MODO_DAILY = 2;
     public final int MODO_PVP = 3;
@@ -33,6 +35,7 @@ public class Controlador {
     private int region = 0;
     private boolean pvp = false;
     private Pokemon pkmnElegido;
+    private ControladorDB controladorDB;
 
     private Random generator;
 
@@ -43,49 +46,47 @@ public class Controlador {
         pokemonComparados.clear();
         intento = 0;
         rv.setAdapter(null);
-        int inicio = 0;
-        int fin = 0;
+        int inicio = 1;
+        int fin = 1025;
         boolean fullDex = false;
+        Random random = new Random();
         //Limitamos la lista según región
         switch (region) {
             case 1:
-                inicio = 0;
-                fin = 150;
+                inicio = 1;
+                fin = 151;
                 break;
             case 2: // Johto
-                inicio = 151;
-                fin = 250;
+                inicio = 152;
+                fin = 251;
                 break;
             case 3: // Hoenn
-                inicio = 251;
-                fin = 385;
+                inicio = 252;
+                fin = 386;
                 break;
             case 4: // Sinnoh
-                inicio = 386;
-                fin = 492;
+                inicio = 387;
+                fin = 493;
                 break;
             case 5: // Teselia / Unova
-                inicio = 493;
-                fin = 648;
+                inicio = 494;
+                fin = 649;
                 break;
             case 6: // Kalos
-                inicio = 649;
-                fin = 720;
+                inicio = 650;
+                fin = 721;
                 break;
             case 7: // Alola
-                inicio = 721;
+                inicio = 722;
                 fin = 808;
                 break;
             case 8: // Galar + Hisui
                 inicio = 809;
-                fin = 904;
+                fin = 905;
                 break;
             case 9: // Paldea
-                inicio = 905;
-                fin = 1024;
+                inicio = 906;
                 break;
-            case 0:
-                fullDex = true;
         }
         if (!fullDex) {
             for (int i = inicio; i <= fin; i++) {
@@ -94,6 +95,8 @@ public class Controlador {
         } else {
             pokedexEnUso.addAll(pokedex);
         }
+        int topeRandom = (inicio-fin);
+        //int id = random.nextInt(topeRandom)+inicio;
         pkmnElegido = pokedexEnUso.get((int) (Math.random() * pokedexEnUso.size()));
 
 
@@ -111,15 +114,6 @@ public class Controlador {
 
     }
 
-    public void cargarPokemonConIndex(int indexPokemon) {
-        //Limpiamos posibles datos previos
-        pokedexEnUso.addAll(pokedex);
-        pokemonMencionados.clear();
-        pokemonComparados.clear();
-        intento = 0;
-        rv.setAdapter(null);
-        System.out.println(pkmnElegido);
-    }
 
     public boolean comparar(Pokemon pkmn) {
         int[] resultadosComparacion = new int[7];
@@ -158,7 +152,7 @@ public class Controlador {
             if (pkmn.getAltura() > pkmnElegido.getAltura()) {
                 resultadosComparacion[3] = -1;
             } else {
-                resultadosComparacion[3] = -1;
+                resultadosComparacion[3] = -2;
             }
         }
         //PESO
@@ -238,9 +232,11 @@ public class Controlador {
         generator = new Random(randomSeed);
     }
 
-    public Controlador(RecyclerView rv, Context context) {
+    public ControladorJuego(RecyclerView rv, Context context) {
         this.rv = rv;
         this.context = context;
+        this.controladorDB = new ControladorDB(context);
+        System.out.println(controladorDB.pokemonCount());
         pokedex.add(new Pokemon(1, "Bulbasaur", Pokemon.PLANTA, Pokemon.VENENO, 0.7, 6.9, 1, Pokemon.KANTO));
         pokedex.add(new Pokemon(2, "Ivysaur", Pokemon.PLANTA, Pokemon.VENENO, 1.0, 13.0, 2, Pokemon.KANTO));
         pokedex.add(new Pokemon(3, "Venusaur", Pokemon.PLANTA, Pokemon.VENENO, 2.0, 100.0, 3, Pokemon.KANTO));

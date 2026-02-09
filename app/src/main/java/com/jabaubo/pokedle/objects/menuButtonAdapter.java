@@ -1,4 +1,4 @@
-package com.jabaubo.pokedle;
+package com.jabaubo.pokedle.objects;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.jabaubo.pokedle.R;
+import com.jabaubo.pokedle.ui.GameActivity;
+import com.jabaubo.pokedle.ui.MainActivity;
 
 public class menuButtonAdapter extends RecyclerView.Adapter<menuButtonAdapter.MyViewHolder> {
     private static MainActivity mainActivity;
@@ -92,12 +96,6 @@ public class menuButtonAdapter extends RecyclerView.Adapter<menuButtonAdapter.My
                 holder.imagen2.setImageDrawable(mainActivity.getDrawable(R.drawable.pecharunt));
                 holder.constraintLayout.setBackgroundResource(R.drawable.degradado_full);
                 break;
-            case 10:
-                holder.region.setText("PVP");
-                holder.imagen1.setImageDrawable(mainActivity.getDrawable(R.drawable.bulbasaur));
-                holder.imagen2.setImageDrawable(mainActivity.getDrawable(R.drawable.pecharunt));
-                holder.constraintLayout.setBackgroundResource(R.drawable.degradado_full);
-                break;
         }
 
         holder.menuView.setOnClickListener(new View.OnClickListener() {
@@ -109,10 +107,6 @@ public class menuButtonAdapter extends RecyclerView.Adapter<menuButtonAdapter.My
                     case 9:
                         valores.putInt("region", 0);
                         valores.putInt("pvp", 0);
-                        break;
-                    case 10:
-                        valores.putInt("region", 0);
-                        valores.putInt("pvp", 1);
                         break;
                     default:
                         valores.putInt("pvp", 0);
@@ -128,7 +122,7 @@ public class menuButtonAdapter extends RecyclerView.Adapter<menuButtonAdapter.My
 
     @Override
     public int getItemCount() {
-        return 11;
+        return 10;
     }
 
 

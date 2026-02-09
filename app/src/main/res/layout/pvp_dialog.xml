@@ -9,11 +9,13 @@
         android:layout_height="wrap_content">
 
         <TextView
+            style="@style/textoComparacionDefault"
             android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="@string/clave"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -22,33 +24,41 @@
 
         <EditText
             android:id="@+id/etClaveDialog"
+            style="@style/textoComparacionDefault"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_margin="5dp"
             android:ems="10"
             android:inputType="number"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:maxLength="9"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/textView2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
         <Button
             android:id="@+id/btUsarDialog"
-            android:layout_width="wrap_content"
+            style="@style/botones"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:text="@string/usar_clave"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextNumber">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/etClaveDialog"
+            app:layout_constraintTop_toBottomOf="@+id/etClaveDialog">
 
         </Button>
 
         <Button
             android:id="@+id/btGenerarDialog"
-            android:layout_width="wrap_content"
+            style="@style/botones"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_margin="5dp"
             android:text="@string/generar_clave"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btUsarDialog">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/etClaveDialog"
+            app:layout_constraintTop_toBottomOf="@+id/etClaveDialog">
 
         </Button>
     </androidx.constraintlayout.widget.ConstraintLayout>

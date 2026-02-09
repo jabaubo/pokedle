@@ -5,7 +5,7 @@
 *
 * Funcionalidad : Modelo del objeto Pokemon */
 
-package com.jabaubo.pokedle;
+package com.jabaubo.pokedle.objects;
 
 import java.util.Arrays;
 
@@ -40,6 +40,7 @@ public class Pokemon {
     public static final int ROCA = 16;
     public static final int ACERO = 17;
     public static final int AGUA = 18;
+    private static final String[] arrayTipos = {"Ninguno","Bicho","Siniestro","Dragón","Eléctrico","Hada","Lucha","Fuego","Volador","Fantasma","Planta","Tierra","Hielo","Normal","Veneno","Psíquico","Roca","Acero","Agua"};
 
     //Constantes de regiones
     public static final int KANTO = 1;
@@ -51,6 +52,8 @@ public class Pokemon {
     public static final int ALOLA = 7;
     public static final int GALAR = 8;
     public static final int PALDEA = 9;
+    private static final String[] arrayRegiones = {"Desconocida","Kanto","Johto","Hoenn","Sinnoh","Teselia","Kalos","Alola","Galar","Paldea"};
+
 
     public Pokemon(int numero, String nombre, int tipo1, int tipo2, double altura, double peso, int etapaEvolutiva, int region) {
         this.numero = numero;
@@ -127,6 +130,14 @@ public class Pokemon {
 
     public void setRegion(int region) {
         this.region = region;
+    }
+
+    public static String[] getArrayRegiones() {
+        return arrayRegiones;
+    }
+
+    public static String[] getArrayTipos() {
+        return arrayTipos;
     }
 
     @Override

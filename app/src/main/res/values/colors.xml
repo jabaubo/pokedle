@@ -4,5 +4,22 @@
     <color name="white">#FFFFFFFF</color>
     <color name="verde">#FFDAFFD5</color>
     <color name="rojo">#FFFA6B84</color>
+
+    <color name="texto_incorrecto">#FFe32740</color>
+    <color name="texto_correcto">#FF0c9615</color>
+    <color name="texto_correcto_parcialmente">#FFff8605</color>
+
+    <color name="bg_campo_azul">#FFebfffd</color>
+    <color name="bg_card">#FFc0faf4</color>
+
+    <color name="rojo_pokedex">#FF80121b</color>
+    <color name="rojo_pokedex_botones">#FFa31722</color>
+
+    <color name="pokedex_background">#FFedfcfb</color>
+
     <color name="naranja">#FFF59B6E</color>
+    <color name="pokedex_borde">#FFC0C0C0</color>
+
+
+
 </resources>

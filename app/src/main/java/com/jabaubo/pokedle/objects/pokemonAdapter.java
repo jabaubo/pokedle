@@ -1,4 +1,4 @@
-package com.jabaubo.pokedle;
+package com.jabaubo.pokedle.objects;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.jabaubo.pokedle.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,11 +65,80 @@ public class pokemonAdapter extends RecyclerView.Adapter<pokemonAdapter.MyViewHo
         }
         //nombre
         if (comparacion[0]==1){
+            holder.tvNombre.setTextAppearance(R.style.textoComparacionCorrecta);
+            //holder.ivSprite.setTextAppearance(R.style.textoComparacionCorrecta);
+        }
+        else {
+            holder.tvNombre.setTextAppearance(R.style.textoComparacionIncorrecto);
+            //holder.ivSprite.setTextAppearance(R.style.textoComparacionIncorrecto);
+        }
+        //tipo1
+        if (comparacion[1]==1){
+            holder.tvTipo1.setTextAppearance(R.style.textoComparacionCorrecta);
+        } else if (comparacion[1]==-1) {
+            holder.tvTipo1.setTextAppearance(R.style.textoComparacionParcialmenteCorrecta);
+        }
+        else {
+            holder.tvTipo1.setTextAppearance(R.style.textoComparacionIncorrecto);
+        }
+        //tipo2
+        if (comparacion[2]==1){
+            holder.tvTipo2.setTextAppearance(R.style.textoComparacionCorrecta);
+        } else if (comparacion[2]==-1) {
+            holder.tvTipo2.setTextAppearance(R.style.textoComparacionParcialmenteCorrecta);
+        }
+        else {
+            holder.tvTipo2.setTextAppearance(R.style.textoComparacionIncorrecto);
+        }
+        //altura
+        if (comparacion[3]==1){
+            holder.tvAltura.setTextAppearance(R.style.textoComparacionCorrecta);
+        }
+        else if(comparacion[3]==-1){
+            holder.tvAltura.setTextAppearance(R.style.textoComparacionIncorrecto);
+            holder.tvAltura.setText("<"+holder.tvAltura.getText());
+
+        }
+        else {
+            holder.tvAltura.setTextAppearance(R.style.textoComparacionIncorrecto);
+            holder.tvAltura.setText(">"+holder.tvAltura.getText());
+        }
+        //peso
+        if (comparacion[4]==1){
+            holder.tvPeso.setTextAppearance(R.style.textoComparacionCorrecta);
+        }
+        else if(comparacion[4]==-1){
+            holder.tvPeso.setTextAppearance(R.style.textoComparacionIncorrecto);
+            holder.tvPeso.setText("<"+holder.tvPeso.getText());
+        }
+        else {
+            holder.tvPeso.setTextAppearance(R.style.textoComparacionIncorrecto);
+            holder.tvPeso.setText(">"+holder.tvPeso.getText());
+
+        }
+        //etapa
+        if (comparacion[5]==1){
+            holder.tvEtapa.setTextAppearance(R.style.textoComparacionCorrecta);
+        }
+        else {
+            holder.tvEtapa.setTextAppearance(R.style.textoComparacionIncorrecto);
+        }
+        //region
+        if (comparacion[6]==1){
+            holder.tvRegion.setTextAppearance(R.style.textoComparacionCorrecta);
+        }
+        else {
+            holder.tvRegion.setTextAppearance(R.style.textoComparacionIncorrecto);
+        }
+        /*
+        * 
+        //nombre
+        if (comparacion[0]==1){;
             holder.tvNombre.setBackgroundColor(resources.getColor(R.color.verde,null));
             holder.ivSprite.setBackgroundColor(resources.getColor(R.color.verde,null));
         }
         else {
-            holder.tvNombre.setBackgroundColor(resources.getColor(R.color.rojo,null));
+            holder.tvNombre.setTextAppearance(R.style.textoComparacionIncorrecto);
             holder.ivSprite.setBackgroundColor(resources.getColor(R.color.rojo,null));
         }
         //tipo1
@@ -127,10 +198,7 @@ public class pokemonAdapter extends RecyclerView.Adapter<pokemonAdapter.MyViewHo
         }
         else {
             holder.tvRegion.setBackgroundColor(resources.getColor(R.color.rojo,null));
-        }
-
-
-        System.out.println(data.toStringComparacion());
+        }*/
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.jabaubo.pokedle;
+package com.jabaubo.pokedle.ui;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -16,9 +15,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jabaubo.pokedle.objects.ControladorJuego;
+import com.jabaubo.pokedle.objects.Pokemon;
+import com.jabaubo.pokedle.R;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
@@ -27,8 +34,9 @@ public class GameActivity extends AppCompatActivity {
     private Button btAyuda;
     private TextView tvIntentos;
     private AutoCompleteTextView autoCompleteTextView;
-    private Controlador controlador;
+    private ControladorJuego controladorJuego;
     private int valorModo = 0;
+    private LocalDateTime tiempoInicio = LocalDateTime.now();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,30 +54,30 @@ public class GameActivity extends AppCompatActivity {
         autoCompleteTextView = findViewById(R.id.actvGame);
         tvIntentos = findViewById(R.id.tvIntentos);
         btAyuda = findViewById(R.id.btAyuda);
-        controlador = new Controlador(rv,this);
+        controladorJuego = new ControladorJuego(rv,this);
         Bundle valores = getIntent().getExtras();
 
         String modoStr = valores.getString("modo");
         switch (modoStr){
             case "NORMAL":
-                valorModo = controlador.MODO_NORMAL;
-                controlador.setRegion(valores.getInt("region"));
-                controlador.cargarPokemon();
+                valorModo = controladorJuego.MODO_NORMAL;
+                controladorJuego.setRegion(valores.getInt("region"));
+                controladorJuego.cargarPokemon();
                 break;
             case "DAILY":
-                valorModo = controlador.MODO_DAILY;
-                controlador.setRandomSeed(valores.getInt("seed"));
-                controlador.cargarPokemonConSeed();
+                valorModo = controladorJuego.MODO_DAILY;
+                controladorJuego.setRandomSeed(valores.getInt("seed"));
+                controladorJuego.cargarPokemonConSeed();
                 btReset.setEnabled(false);
                 break;
             case "PVP":
-                valorModo = controlador.MODO_PVP;
-                controlador.setRandomSeed(valores.getInt("seed"));
-                controlador.cargarPokemonConSeed();
+                valorModo = controladorJuego.MODO_PVP;
+                controladorJuego.setRandomSeed(valores.getInt("seed"));
+                controladorJuego.cargarPokemonConSeed();
                 break;
         }
-        System.out.println(controlador.getPkmnElegido());
-        autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1,controlador.getNombresPkmn()));
+        System.out.println(controladorJuego.getPkmnElegido());
+        autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1, controladorJuego.getNombresPkmn()));
         autoCompleteTextView.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -89,7 +97,7 @@ public class GameActivity extends AppCompatActivity {
                 clickAyuda();
             }
         });
-        tvIntentos.setText("Intentos: "+controlador.getIntento());
+        tvIntentos.setText("Intentos: "+ controladorJuego.getIntento());
 
     }
 
@@ -98,33 +106,35 @@ public class GameActivity extends AppCompatActivity {
         if (keyCode == KeyEvent.KEYCODE_ENTER & event.getAction()==KeyEvent.ACTION_DOWN){
             autoCompleteTextView.setAdapter(null);
             String nombre = String.valueOf(autoCompleteTextView.getText());
-            ArrayList<Pokemon> lista = controlador.getPokedexEnUso();
+            ArrayList<Pokemon> lista = controladorJuego.getPokedexEnUso();
             final boolean[] existe = {false};
             for (int i = 0 ; i < lista.size();i++){
                 if (nombre.equalsIgnoreCase(lista.get(i).getNombre())){
                     existe[0] = true;
-                    boolean resultado = controlador.comparar(lista.get(i));
-                    tvIntentos.setText("Intentos: "+controlador.getIntento());
+                    boolean resultado = controladorJuego.comparar(lista.get(i));
+                    tvIntentos.setText("Intentos: "+ controladorJuego.getIntento());
                     lista.remove(i);
-                    autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1,controlador.getNombresPkmn()));
+                    autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1, controladorJuego.getNombresPkmn()));
                     if(resultado){
+                        LocalDateTime tiempoFin = LocalDateTime.now();
+                        Long tiempoDiferencia = ChronoUnit.SECONDS.between(tiempoInicio,tiempoFin);
                         AlertDialog alertDialog = new AlertDialog.Builder(GameActivity.this)
-                                .setTitle("Has acertado en " + controlador.getIntento() + " intento(s)")
-                                .setMessage("¿Quieres reiniciar el juego?")
+                                .setTitle("Has acertado en " + controladorJuego.getIntento() + " intento(s)")
+                                .setMessage(String.format("Tiempo utilizado %s\n¿Quieres reiniciar el juego?",LocalTime.ofSecondOfDay(tiempoDiferencia)))
                                 .setPositiveButton(R.string.si, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         switch (valorModo){
                                             case 1:
-                                                controlador.cargarPokemon();
+                                                controladorJuego.cargarPokemon();
                                                 break;
                                             case 3 :
-                                                controlador.cargarPokemonConSeed();
+                                                controladorJuego.cargarPokemonConSeed();
                                                 break;
                                         }
-                                        System.out.println(controlador.getPkmnElegido());
-                                        autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1,controlador.getNombresPkmn()));
-                                        tvIntentos.setText("Intentos: "+controlador.getIntento());
+                                        System.out.println(controladorJuego.getPkmnElegido());
+                                        autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1, controladorJuego.getNombresPkmn()));
+                                        tvIntentos.setText("Intentos: "+ controladorJuego.getIntento());
 
                                     }
                                 })
@@ -163,16 +173,16 @@ public class GameActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (valorModo){
                             case 1:
-                                controlador.cargarPokemon();
+                                controladorJuego.cargarPokemon();
                                 break;
                             case 3 :
-                                controlador.cargarPokemonConSeed();
+                                controladorJuego.cargarPokemonConSeed();
                                 break;
                         }
-                        System.out.println(controlador.getPkmnElegido());
-                        autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1,controlador.getNombresPkmn()));
-                        tvIntentos.setText("Intentos: "+controlador.getIntento());
-
+                        System.out.println(controladorJuego.getPkmnElegido());
+                        autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1, controladorJuego.getNombresPkmn()));
+                        tvIntentos.setText("Intentos: "+ controladorJuego.getIntento());
+                        tiempoInicio = LocalDateTime.now();
 
                     }
                 })

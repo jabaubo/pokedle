@@ -54,6 +54,9 @@ public class Pokemon {
     public static final int PALDEA = 9;
     private static final String[] arrayRegiones = {"Desconocida","Kanto","Johto","Hoenn","Sinnoh","Teselia","Kalos","Alola","Galar","Paldea"};
 
+    public Pokemon(){
+
+    }
 
     public Pokemon(int numero, String nombre, int tipo1, int tipo2, double altura, double peso, int etapaEvolutiva, int region) {
         this.numero = numero;

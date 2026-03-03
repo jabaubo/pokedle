@@ -79,11 +79,11 @@ public class PvpDialog extends DialogFragment {
             Toast.makeText(this.getContext(), "Inserte una clave", Toast.LENGTH_SHORT).show();
         }
         else {
-            int seed = Integer.valueOf(etClave.getText().toString());
+            Long seed = Long.valueOf(etClave.getText().toString());
             Intent intent = new Intent(getContext(), GameActivity.class);
             Bundle bundleValores = new Bundle();
             bundleValores.putString("modo","PVP");
-            bundleValores.putInt("seed",seed);
+            bundleValores.putLong("seed",seed);
             intent.putExtras(bundleValores);
             startActivity(intent);
 
@@ -93,7 +93,7 @@ public class PvpDialog extends DialogFragment {
     public void clickGenerar(){
         String clave = "";
         Random random = new Random();
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 15; i++) {
             clave += String.valueOf(random.nextInt(10));
         }
         etClave.setText(clave);

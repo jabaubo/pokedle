@@ -26,6 +26,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Random;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -92,15 +93,13 @@ public class HomeActivity extends AppCompatActivity {
                             System.out.println("PASO 2");
 
                             LocalDate fecha = LocalDateTime.ofInstant(Instant.ofEpochMilli(conn.getDate()), ZoneId.systemDefault()).toLocalDate();
-
-                            System.out.println("PASO 3");
-                            int seed = Integer.valueOf(fecha.toString().replace("-",""))*192;
-
+                            Long fechaLong = Long.valueOf(fecha.toString().replace("-",""));
+                            Long seed = fechaLong*25214903917L ^ (fechaLong <<9) ;
 
                             Intent intent = new Intent(getBaseContext(), GameActivity.class);
                             Bundle bundleValores = new Bundle();
                             bundleValores.putString("modo","DAILY");
-                            bundleValores.putInt("seed",seed);
+                            bundleValores.putLong("seed",seed);
                             intent.putExtras(bundleValores);
                             startActivity(intent);
 

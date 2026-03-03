@@ -30,7 +30,7 @@
             android:layout_margin="5dp"
             android:ems="10"
             android:inputType="number"
-            android:maxLength="9"
+            android:maxLength="15"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/textView2"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,5 +1,6 @@
 package com.jabaubo.pokedle;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 public class ControladorDB extends SQLiteOpenHelper {
     private Context context;
     private ArrayList<Pokemon> pokedex = new ArrayList<>();
-    private Pokemon pokemonElegido;
     private static final String DATABASE_NAME = "Pokewordle.db";
     private static final int DATABASE_VERSION = 2;
 
@@ -54,6 +54,8 @@ public class ControladorDB extends SQLiteOpenHelper {
             guardarRegionesEnBBDD();
             System.out.printf("Regiones en DB : %d\n", regionesCount());
         }
+
+        leerPokemonId(1);
     }
 
     @Override
@@ -108,7 +110,7 @@ public class ControladorDB extends SQLiteOpenHelper {
 
 
     public void guardarPokemonEnBBDD() {
-        System.out.println(pokedex.size());
+        System.out.printf("gu");
         SQLiteDatabase database = this.getWritableDatabase();
         for (int i = 0; i < pokedex.size(); i++) {
             Pokemon data = pokedex.get(i);
@@ -166,15 +168,55 @@ public class ControladorDB extends SQLiteOpenHelper {
         return false;
     }
 
-    public void leerPokemonId(int id) {
-        String query = "SELECT * FROM " + TABLE_NAME_POKEMON + "WHERE " + COLUMN_ID_POKEMON + " = " + id;
+    public Pokemon leerPokemonId(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] campos = new String[1];
-        campos[0] = COLUMN_ID_POKEMON;
         if (db != null) {
-            Cursor cursor = db.rawQuery(query, campos);
-            System.out.println(cursor.getCount());
+
+            Cursor cursor = db.query(TABLE_NAME_POKEMON,null,String.valueOf(COLUMN_ID_POKEMON+"=?"),new String[]{String.valueOf(id)},null,null,null);
+            cursor.moveToNext();
+
+            Pokemon pokemon = new Pokemon();
+
+            pokemon.setNumero(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID_POKEMON)));
+            pokemon.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)));
+            pokemon.setTipo1(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TYPE1)));
+            pokemon.setTipo2(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TYPE2)));
+            pokemon.setAltura(cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_HEIGHT)));
+            pokemon.setPeso(cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_WEIGHT)));
+            pokemon.setEtapaEvolutiva(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STAGE)));
+            pokemon.setRegion(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REGION)));
+
+            System.out.println(pokemon);
+            return pokemon;
         }
+        return null;
+    }
+
+    public ArrayList<Pokemon> leerPokemonCompleto(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        if (db != null) {
+
+            Cursor cursor = db.query(TABLE_NAME_POKEMON,null,null,null,null,null,null);
+            System.out.printf("Hay %d pokemons en el cursor\n",cursor.getCount());
+            ArrayList<Pokemon> listaPokemon = new ArrayList<>();
+            while (cursor.moveToNext()){
+                Pokemon pokemon = new Pokemon();
+
+                pokemon.setNumero(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID_POKEMON)));
+                pokemon.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)));
+                pokemon.setTipo1(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TYPE1)));
+                pokemon.setTipo2(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TYPE2)));
+                pokemon.setAltura(cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_HEIGHT)));
+                pokemon.setPeso(cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_WEIGHT)));
+                pokemon.setEtapaEvolutiva(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STAGE)));
+                pokemon.setRegion(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REGION)));
+
+                listaPokemon.add(pokemon);
+            }
+            System.out.printf("Tras insertar hay %d Pokemon\n",listaPokemon.size());
+            return listaPokemon;
+        }
+        return null;
     }
 
 

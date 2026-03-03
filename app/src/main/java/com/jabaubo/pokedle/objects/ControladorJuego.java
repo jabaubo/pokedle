@@ -46,14 +46,15 @@ public class ControladorJuego {
         pokemonComparados.clear();
         intento = 0;
         rv.setAdapter(null);
-        int inicio = 1;
-        int fin = 1025;
         boolean fullDex = false;
         Random random = new Random();
-        //Limitamos la lista según región
+        int inicio = 1;
+        int fin = 1025;
         switch (region) {
+            case 0 :
+                fullDex = true;
+                break;
             case 1:
-                inicio = 1;
                 fin = 151;
                 break;
             case 2: // Johto
@@ -88,17 +89,17 @@ public class ControladorJuego {
                 inicio = 906;
                 break;
         }
+        int topeRandom = (fin - inicio+1);
+        int id = random.nextInt(topeRandom) + inicio ;
         if (!fullDex) {
-            for (int i = inicio; i <= fin; i++) {
+            for (int i = (inicio-1); i <= (fin-1); i++) {
                 pokedexEnUso.add(pokedex.get(i));
             }
+            System.out.println(pokedexEnUso.size());
         } else {
             pokedexEnUso.addAll(pokedex);
         }
-        int topeRandom = (inicio-fin);
-        //int id = random.nextInt(topeRandom)+inicio;
-        pkmnElegido = pokedexEnUso.get((int) (Math.random() * pokedexEnUso.size()));
-
+        pkmnElegido = controladorDB.leerPokemonId(id);
 
     }
 
@@ -228,7 +229,7 @@ public class ControladorJuego {
         return intento;
     }
 
-    public void setRandomSeed(int randomSeed) {
+    public void setRandomSeed(Long randomSeed) {
         generator = new Random(randomSeed);
     }
 
@@ -236,7 +237,14 @@ public class ControladorJuego {
         this.rv = rv;
         this.context = context;
         this.controladorDB = new ControladorDB(context);
-        System.out.println(controladorDB.pokemonCount());
+        this.pokedex = controladorDB.leerPokemonCompleto();
+    }
+    /*
+    public ControladorJuego(RecyclerView rv, Context context) {
+        this.rv = rv;
+        this.context = context;
+        this.controladorDB = new ControladorDB(context);
+        //System.out.println(controladorDB.pokemonCount());
         pokedex.add(new Pokemon(1, "Bulbasaur", Pokemon.PLANTA, Pokemon.VENENO, 0.7, 6.9, 1, Pokemon.KANTO));
         pokedex.add(new Pokemon(2, "Ivysaur", Pokemon.PLANTA, Pokemon.VENENO, 1.0, 13.0, 2, Pokemon.KANTO));
         pokedex.add(new Pokemon(3, "Venusaur", Pokemon.PLANTA, Pokemon.VENENO, 2.0, 100.0, 3, Pokemon.KANTO));
@@ -1263,4 +1271,5 @@ public class ControladorJuego {
         pokedex.add(new Pokemon(1024, "Terapagos", Pokemon.NORMAL, Pokemon.NINGUNO, 0.2, 6.5, 1, Pokemon.PALDEA));
         pokedex.add(new Pokemon(1025, "Pecharunt", Pokemon.VENENO, Pokemon.FANTASMA, 0.3, 0.3, 1, Pokemon.PALDEA));
     }
+     */
 }

@@ -66,13 +66,13 @@ public class GameActivity extends AppCompatActivity {
                 break;
             case "DAILY":
                 valorModo = controladorJuego.MODO_DAILY;
-                controladorJuego.setRandomSeed(valores.getInt("seed"));
+                controladorJuego.setRandomSeed(valores.getLong("seed"));
                 controladorJuego.cargarPokemonConSeed();
                 btReset.setEnabled(false);
                 break;
             case "PVP":
                 valorModo = controladorJuego.MODO_PVP;
-                controladorJuego.setRandomSeed(valores.getInt("seed"));
+                controladorJuego.setRandomSeed(valores.getLong("seed"));
                 controladorJuego.cargarPokemonConSeed();
                 break;
         }

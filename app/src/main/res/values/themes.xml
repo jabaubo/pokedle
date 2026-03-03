@@ -40,6 +40,7 @@
         <item name="fontFamily">@font/pokemon_xy</item>
         <item name="android:padding">0.25dp</item>
         <item name="backgroundTint">@color/rojo_pokedex_botones</item>
+        <item name="android:textColor">@color/white</item>
     </style>
     <style name="Theme.Pokedle2" parent="Base.Theme.Pokedle2" />
 </resources>

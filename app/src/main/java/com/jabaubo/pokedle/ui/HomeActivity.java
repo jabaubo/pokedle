@@ -34,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button btJuegoLibre;
     private Button btRetoDiario;
     private Button btPvp;
+    private Button btPokedex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
         btJuegoLibre = findViewById(R.id.btJuegoLibre);
         btRetoDiario = findViewById(R.id.btRetoDiario);
         btPvp = findViewById(R.id.btPvpHome);
-
+        btPokedex = findViewById(R.id.btPokedex);
         btJuegoLibre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,6 +67,12 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 clickPvp();
+            }
+        });
+        btPokedex.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickPokedex();
             }
         });
     }
@@ -135,6 +142,10 @@ public class HomeActivity extends AppCompatActivity {
         }
 
 
+    }
+    private void clickPokedex(){
+        Intent intent = new Intent(getBaseContext(), PokedexActivity.class);
+        startActivity(intent);
     }
 
 

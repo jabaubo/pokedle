@@ -21,11 +21,9 @@ import com.jabaubo.pokedle.objects.ControladorJuego;
 import com.jabaubo.pokedle.objects.Pokemon;
 import com.jabaubo.pokedle.R;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
@@ -52,7 +50,7 @@ public class GameActivity extends AppCompatActivity {
         rv=findViewById(R.id.gameRv);
         btReset = findViewById(R.id.btResetGame);
         autoCompleteTextView = findViewById(R.id.actvGame);
-        tvIntentos = findViewById(R.id.tvIntentos);
+        tvIntentos = findViewById(R.id.tvCantidad);
         btAyuda = findViewById(R.id.btAyuda);
         controladorJuego = new ControladorJuego(rv,this);
         Bundle valores = getIntent().getExtras();
@@ -135,6 +133,7 @@ public class GameActivity extends AppCompatActivity {
                                         System.out.println(controladorJuego.getPkmnElegido());
                                         autoCompleteTextView.setAdapter(new ArrayAdapter<>(GameActivity.this, android.R.layout.simple_list_item_activated_1, controladorJuego.getNombresPkmn()));
                                         tvIntentos.setText("Intentos: "+ controladorJuego.getIntento());
+                                        tiempoInicio = LocalDateTime.now();
 
                                     }
                                 })

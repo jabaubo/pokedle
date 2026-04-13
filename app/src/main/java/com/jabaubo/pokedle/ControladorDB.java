@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.jabaubo.pokedle.objects.Filtro;
 import com.jabaubo.pokedle.objects.Pokemon;
 
 import java.util.ArrayList;
@@ -219,7 +220,72 @@ public class ControladorDB extends SQLiteOpenHelper {
         return null;
     }
 
+    public ArrayList<Pokemon> leerPokemonConFiltro(Filtro filtro){
+        SQLiteDatabase db = this.getReadableDatabase();
+        if (db != null) {
+            StringBuilder campos = new StringBuilder();
+            ArrayList<String> argumentosCampos = new ArrayList<>();
 
+            if (filtro.getTipo1() != null && filtro.getTipo1() > 0) {
+                campos.append("tipo1 = ?");
+                argumentosCampos.add(String.valueOf(filtro.getTipo1()));
+            }
+
+            if (filtro.getTipo2() != null && filtro.getTipo2() >= 0) {
+                if (campos.length() > 0) campos.append(" AND ");
+                campos.append("tipo2 = ?");
+                argumentosCampos.add(String.valueOf(filtro.getTipo2()));
+            }
+
+            if (filtro.getAltura() != null) {
+                if (campos.length() > 0) campos.append(" AND ");
+                campos.append("altura >= ?");
+                argumentosCampos.add(String.valueOf(filtro.getAltura()));
+            }
+
+            if (filtro.getPeso() != null) {
+                if (campos.length() > 0) campos.append(" AND ");
+                campos.append("peso >= ?");
+                argumentosCampos.add(String.valueOf(filtro.getPeso()));
+            }
+
+            if (filtro.getEtapa() != null && filtro.getEtapa() > 0) {
+                if (campos.length() > 0) campos.append(" AND ");
+                campos.append("etapa = ?");
+                argumentosCampos.add(String.valueOf(filtro.getEtapa()));
+            }
+
+            if (filtro.getRegion() != null && filtro.getRegion() > 0) {
+                if (campos.length() > 0) campos.append(" AND ");
+                campos.append("region = ?");
+                argumentosCampos.add(String.valueOf(filtro.getRegion()));
+            }
+            if (campos.length() == 0 ){
+                return leerPokemonCompleto();
+            }
+            String[] selectionArgs = argumentosCampos.toArray(new String[0]);
+            Cursor cursor = db.query(TABLE_NAME_POKEMON,null,campos.toString(),selectionArgs,null,null,null);
+            System.out.printf("Hay %d pokemons en el cursor\n",cursor.getCount());
+            ArrayList<Pokemon> listaPokemon = new ArrayList<>();
+            while (cursor.moveToNext()){
+                Pokemon pokemon = new Pokemon();
+
+                pokemon.setNumero(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID_POKEMON)));
+                pokemon.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)));
+                pokemon.setTipo1(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TYPE1)));
+                pokemon.setTipo2(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TYPE2)));
+                pokemon.setAltura(cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_HEIGHT)));
+                pokemon.setPeso(cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_WEIGHT)));
+                pokemon.setEtapaEvolutiva(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_STAGE)));
+                pokemon.setRegion(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_REGION)));
+
+                listaPokemon.add(pokemon);
+            }
+            System.out.printf("Tras insertar hay %d Pokemon\n",listaPokemon.size());
+            return listaPokemon;
+        }
+        return null;
+    }
     public ArrayList<Pokemon> datosBrutosPokemon() {
         ArrayList<Pokemon> lista = new ArrayList<>();
 

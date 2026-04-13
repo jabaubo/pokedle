@@ -8,6 +8,18 @@
     android:background="@color/rojo_pokedex">
 
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="home_layout.xml" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="home_layout.xml" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btResetGame"
         style="@style/botones"
@@ -47,7 +59,7 @@
         app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/btResetGame"
         app:layout_constraintEnd_toStartOf="@+id/btResetGame"
-        app:layout_constraintStart_toStartOf="@+id/tvIntentos"
+        app:layout_constraintStart_toStartOf="@+id/tvCantidad"
         app:layout_constraintTop_toTopOf="@+id/btResetGame">
 
         <AutoCompleteTextView
@@ -70,7 +82,7 @@
         app:cardCornerRadius="8dp"
         app:layout_constraintBottom_toTopOf="@+id/btAyuda"
         app:layout_constraintEnd_toEndOf="@+id/btAyuda"
-        app:layout_constraintStart_toStartOf="@+id/tvIntentos"
+        app:layout_constraintStart_toStartOf="@+id/tvCantidad"
         app:layout_constraintTop_toBottomOf="@+id/btResetGame"
         app:strokeColor="@color/pokedex_borde"
         app:strokeWidth="3dp">
@@ -86,7 +98,7 @@
 
     <TextView
         style="@style/textoComparacionDefault"
-        android:id="@+id/tvIntentos"
+        android:id="@+id/tvCantidad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
